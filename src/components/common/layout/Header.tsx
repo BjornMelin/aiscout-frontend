@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BellIcon } from "@heroicons/react/24/outline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import SearchBar from "@/components/features/search/SearchBar";
 
 /**
  * Header component for the AIScout application.
@@ -9,6 +10,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export default function Header() {
   // TODO: Replace with actual auth state
   const isLoggedIn = false;
+
+  const handleSearch = (query: string) => {
+    // TODO: Implement search functionality
+    console.log("Search query:", query);
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -36,16 +42,9 @@ export default function Header() {
           </Link>
         </nav>
 
-        {/* Search Bar Placeholder */}
+        {/* Search Bar */}
         <div className="hidden md:flex flex-1 items-center justify-center px-6">
-          <div className="w-full max-w-lg">
-            {/* TODO: Add SearchBar component here */}
-            <input
-              type="search"
-              placeholder="Search..."
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
-            />
-          </div>
+          <SearchBar variant="header" onSearch={handleSearch} />
         </div>
 
         {/* Right Section: Notifications & Profile */}
