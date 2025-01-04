@@ -1,135 +1,118 @@
-import { useState, useEffect, useRef } from "react";
+"use client";
+
+import React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useDebounce } from "use-debounce";
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
-// Static suggestions for testing
-const suggestions = [
-  "Reinforcement Learning",
-  "Computer Vision",
-  "Natural Language Processing",
-  "Generative Adversarial Networks",
-  "Transformers",
-  "Convolutional Neural Networks",
-  "Recurrent Neural Networks",
-  "Deep Learning",
-  "Machine Learning",
-  "Artificial Intelligence",
-  "GPT-4",
-  "BERT",
-  "ResNet",
-  "arXiv",
-  "GitHub",
-  "OpenAI",
-  "DeepMind",
-];
-
 interface SearchBarProps {
+  placeholder?: string;
+  showAutocomplete?: boolean;
   variant?: "header" | "page";
   onSearch?: (query: string) => void;
-  className?: string;
 }
 
-export default function SearchBar({
-  variant = "header",
+export function SearchBar({
+  placeholder = "Search AI/ML content...",
+  showAutocomplete = true,
+  variant = "page",
   onSearch,
-  className = "",
 }: SearchBarProps) {
-  const [query, setQuery] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
-  const searchRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
+  const [debouncedValue] = useDebounce(value, 500);
 
-  // Filter suggestions based on input
-  useEffect(() => {
-    const filtered = suggestions
-      .filter((suggestion) =>
-        suggestion.toLowerCase().includes(query.toLowerCase())
-      )
-      .slice(0, 5); // Limit to 5 suggestions
-    setFilteredSuggestions(filtered);
-  }, [query]);
+  // Autocomplete suggestions state
+  const [suggestions, setSuggestions] = React.useState<string[]>([]);
 
-  // Handle click outside to close suggestions
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
-        setShowSuggestions(false);
-      }
+  React.useEffect(() => {
+    if (debouncedValue.length < 2) return;
+    // TODO: Implement API call for suggestions
+    // For now, we'll use mock suggestions
+    setSuggestions([
+      `${debouncedValue} in papers`,
+      `${debouncedValue} in repositories`,
+      `${debouncedValue} in articles`,
+    ]);
+  }, [debouncedValue]);
+
+  const handleSearch = (searchTerm: string) => {
+    if (onSearch) {
+      onSearch(searchTerm);
+      return;
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  // Handle search submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearch?.(query);
-    setShowSuggestions(false);
-  };
-
-  // Handle suggestion click
-  const handleSuggestionClick = (suggestion: string) => {
-    setQuery(suggestion);
-    onSearch?.(suggestion);
-    setShowSuggestions(false);
+    const params = new URLSearchParams(searchParams.toString());
+    if (searchTerm) {
+      params.set("q", searchTerm);
+    } else {
+      params.delete("q");
+    }
+    router.push(`/search?${params.toString()}`);
   };
 
   return (
     <div
-      ref={searchRef}
-      className={`relative ${className} ${
-        variant === "page" ? "w-full max-w-3xl" : "w-full max-w-lg"
-      }`}
+      className={`relative w-full ${
+        variant === "header" ? "max-w-lg" : "max-w-2xl"
+      } mx-auto`}
     >
-      <form onSubmit={handleSubmit} className="relative">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            type="search"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setShowSuggestions(true);
-            }}
-            onFocus={() => setShowSuggestions(true)}
-            placeholder="Search papers, repositories, articles..."
-            className={`w-full rounded-md border border-input bg-background pl-9 ${
-              variant === "page" ? "h-12 text-base px-4" : "h-9 text-sm px-3"
-            } ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
-            role="combobox"
-            aria-label="Search"
-            aria-controls="search-suggestions"
-            aria-expanded={showSuggestions && query.length > 0}
-            aria-haspopup="listbox"
-          />
-        </div>
+      <div className="relative flex items-center">
+        <Input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder={placeholder}
+          className={`w-full pr-10 ${variant === "header" ? "h-9" : "h-12"}`}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSearch(value);
+            }
+          }}
+        />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute right-0 top-0 h-full"
+          onClick={() => handleSearch(value)}
+        >
+          <Search className="h-4 w-4" />
+        </Button>
+      </div>
 
-        {/* Suggestions dropdown */}
-        {showSuggestions &&
-          query.length > 0 &&
-          filteredSuggestions.length > 0 && (
-            <ul
-              id="search-suggestions"
-              className="absolute z-50 w-full mt-1 bg-background border rounded-md shadow-lg py-1"
-              role="listbox"
-            >
-              {filteredSuggestions.map((suggestion) => (
-                <li
+      {showAutocomplete && suggestions.length > 0 && (
+        <CommandDialog open={open} onOpenChange={setOpen}>
+          <CommandInput placeholder="Type to search..." />
+          <CommandList>
+            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandGroup heading="Suggestions">
+              {suggestions.map((suggestion) => (
+                <CommandItem
                   key={suggestion}
-                  role="option"
-                  aria-selected={false}
-                  className="px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
-                  onClick={() => handleSuggestionClick(suggestion)}
+                  onSelect={() => {
+                    setValue(suggestion);
+                    handleSearch(suggestion);
+                    setOpen(false);
+                  }}
                 >
                   {suggestion}
-                </li>
+                </CommandItem>
               ))}
-            </ul>
-          )}
-      </form>
+            </CommandGroup>
+          </CommandList>
+        </CommandDialog>
+      )}
     </div>
   );
 }

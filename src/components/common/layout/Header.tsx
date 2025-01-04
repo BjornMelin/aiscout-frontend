@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { BellIcon } from "@heroicons/react/24/outline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import SearchBar from "@/components/features/search/SearchBar";
+import { SearchBar } from "@/components/features/search/SearchBar/SearchBar";
 
 /**
  * Header component for the AIScout application.
