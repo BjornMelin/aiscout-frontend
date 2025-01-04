@@ -43,17 +43,20 @@ AIScout is an intelligent content discovery and management platform that helps u
 ## 🚀 Getting Started
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/yourusername/aiscout-frontend.git
    cd aiscout-frontend
    ```
 
 2. **Install dependencies**
+
    ```bash
    yarn install
    ```
 
 3. **Start the development server**
+
    ```bash
    yarn dev
    ```
@@ -122,6 +125,10 @@ AWS-certified Solutions Architect, Developer, SysOps Administrator, and Machine 
 - [Coursera](https://www.coursera.org/learner/bjorn-melin)
 - [Medium](https://medium.com/@bjornmelin)
 
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 ---
 
 <div align="center">
@@ -129,7 +136,3 @@ AWS-certified Solutions Architect, Developer, SysOps Administrator, and Machine 
 Built with ❤️ by [Bjorn Melin](https://bjornmelin.io)
 
 </div>
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
