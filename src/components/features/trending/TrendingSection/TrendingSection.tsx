@@ -7,7 +7,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingTopicCard } from "../TrendingTopicCard/TrendingTopicCard";
 import { TrendingVisualization } from "../TrendingVisualization/TrendingVisualization";
 import { useTrendingStore } from "@/lib/store/trending";
-import type { TrendingStore } from "@/lib/types/trending";
+import type { TrendingStore, TrendingTopic } from "@/lib/types/trending";
 
 export function TrendingSection() {
   const { topics, isLoading, error, timeframe, setTimeframe, fetch } =
@@ -47,7 +47,7 @@ export function TrendingSection() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-4">
-          {topics.map((topic) => (
+          {topics.map((topic: TrendingTopic) => (
             <TrendingTopicCard key={topic.id} topic={topic} />
           ))}
         </div>

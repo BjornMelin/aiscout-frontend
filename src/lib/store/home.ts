@@ -21,10 +21,29 @@ export const useHomePageStore = create<HomePageStore>((set) => ({
   fetch: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetch("/api/curated-content");
+      const response = await fetch("/api/curated-content", {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch curated content");
+      }
+
       const data = await response.json();
-      set({ curatedContent: data, isLoading: false });
+      set({ 
+        curatedContent: {
+          papers: data.papers || [],
+          repositories: data.repositories || [],
+          articles: data.articles || [],
+          discussions: data.discussions || [],
+        },
+        isLoading: false 
+      });
     } catch (error) {
+      console.error("Error fetching curated content:", error);
       set({ error: error as Error, isLoading: false });
     }
   },

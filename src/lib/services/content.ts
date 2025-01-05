@@ -15,16 +15,26 @@ export async function getContent(contentId: string): Promise<ContentItem> {
 }
 
 export async function getContentMetadata(contentId: string) {
-  const content = await getContent(contentId);
+  try {
+    const content = await getContent(contentId);
 
-  return {
-    title: `${content.title} - AIScout`,
-    description: content.description,
-    openGraph: {
-      title: content.title,
+    // Map content types to valid OpenGraph types
+    const ogType = content.type === 'article' ? 'article' : 'website';
+
+    return {
+      title: `${content.title} - AIScout`,
       description: content.description,
-      type: "article",
-      authors: content.authors.map((a) => a.name),
-    },
-  };
+      openGraph: {
+        title: content.title,
+        description: content.description,
+        type: ogType,
+        authors: content.authors.map((a) => a.name),
+      },
+    };
+  } catch {
+    return {
+      title: "Content Not Found - AIScout",
+      description: "The requested content could not be found.",
+    };
+  }
 }

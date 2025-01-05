@@ -3,7 +3,33 @@ import { CuratedContent } from "@/lib/types/home";
 export const mockCuratedContent: CuratedContent = {
   papers: [
     {
-      id: "paper1",
+      id: "1",
+      type: "paper",
+      title: "Understanding Deep Learning Requires Rethinking Generalization",
+      description:
+        "A groundbreaking paper that challenges conventional wisdom about how neural networks learn.",
+      abstract:
+        "Deep learning has enabled remarkable progress over the last years in computer vision, speech recognition, and other domains. Despite these successes, we still have a poor understanding of why these networks work as well as they do.",
+      authors: [
+        { id: "a1", name: "Chiyuan Zhang" },
+        { id: "a2", name: "Samy Bengio" },
+      ],
+      date: "2017-03-15T00:00:00.000Z",
+      tags: [
+        { id: "t1", name: "Deep Learning" },
+        { id: "t2", name: "Machine Learning Theory" },
+      ],
+      metrics: {
+        views: 50000,
+        citations: 3500,
+      },
+      url: "https://example.com/paper-1",
+      doi: "10.1234/example.doi",
+      journal: "ICLR 2017",
+      citations: 3500,
+    },
+    {
+      id: "2",
       type: "paper",
       title: "Attention Is All You Need",
       description:
@@ -17,9 +43,9 @@ export const mockCuratedContent: CuratedContent = {
       ],
       date: "2017-06-12T00:00:00.000Z",
       tags: [
-        { id: "t1", name: "Transformers" },
-        { id: "t2", name: "Deep Learning" },
-        { id: "t3", name: "NLP" },
+        { id: "t3", name: "Transformers" },
+        { id: "t4", name: "Deep Learning" },
+        { id: "t5", name: "NLP" },
       ],
       metrics: {
         views: 1000000,
@@ -30,62 +56,34 @@ export const mockCuratedContent: CuratedContent = {
       journal: "arXiv",
       citations: 123456,
     },
-    {
-      id: "paper2",
-      type: "paper",
-      title: "BERT: Pre-training of Deep Bidirectional Transformers",
-      description:
-        "We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers.",
-      abstract:
-        "We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers.",
-      authors: [
-        { id: "jd1", name: "Jacob Devlin" },
-        { id: "mc1", name: "Ming-Wei Chang" },
-        { id: "kl1", name: "Kenton Lee" },
-      ],
-      date: "2018-10-11T00:00:00.000Z",
-      tags: [
-        { id: "t1", name: "BERT" },
-        { id: "t2", name: "NLP" },
-        { id: "t3", name: "Transformers" },
-      ],
-      metrics: {
-        views: 800000,
-        citations: 98765,
-      },
-      url: "https://arxiv.org/abs/1810.04805",
-      doi: "10.48550/arXiv.1810.04805",
-      journal: "arXiv",
-      citations: 98765,
-    },
   ],
   repositories: [
     {
-      id: "repo1",
+      id: "4",
       type: "repo",
       title: "transformers",
       description:
-        "State-of-the-art Machine Learning for PyTorch, TensorFlow, and JAX.",
+        "State-of-the-art Natural Language Processing for PyTorch and TensorFlow 2.0",
       authors: [{ id: "hf1", name: "Hugging Face" }],
       date: "2018-10-29T00:00:00.000Z",
       tags: [
-        { id: "t1", name: "Machine Learning" },
-        { id: "t2", name: "NLP" },
-        { id: "t3", name: "Deep Learning" },
+        { id: "t9", name: "Machine Learning" },
+        { id: "t10", name: "NLP" },
+        { id: "t11", name: "Deep Learning" },
       ],
       metrics: {
-        views: 500000,
-        stars: 123456,
-        forks: 23456,
+        views: 1000000,
+        stars: 45000,
+        forks: 10000,
       },
       url: "https://github.com/huggingface/transformers",
       language: "Python",
-      stars: 123456,
-      forks: 23456,
-      lastCommit: "2024-01-04T12:00:00.000Z",
+      stars: 45000,
+      forks: 10000,
+      lastCommit: "2024-01-05T00:00:00.000Z",
     },
     {
-      id: "repo2",
+      id: "5",
       type: "repo",
       title: "pytorch",
       description:
@@ -93,9 +91,9 @@ export const mockCuratedContent: CuratedContent = {
       authors: [{ id: "pt1", name: "PyTorch Team" }],
       date: "2016-08-13T00:00:00.000Z",
       tags: [
-        { id: "t1", name: "Deep Learning" },
-        { id: "t2", name: "Machine Learning" },
-        { id: "t3", name: "Neural Networks" },
+        { id: "t12", name: "Deep Learning" },
+        { id: "t13", name: "Machine Learning" },
+        { id: "t14", name: "Neural Networks" },
       ],
       metrics: {
         views: 400000,
@@ -106,23 +104,45 @@ export const mockCuratedContent: CuratedContent = {
       language: "Python",
       stars: 98765,
       forks: 12345,
-      lastCommit: "2024-01-04T12:00:00.000Z",
+      lastCommit: "2024-01-04T00:00:00.000Z",
     },
   ],
   articles: [
     {
-      id: "article1",
+      id: "6",
+      type: "article",
+      title: "Understanding Transformers: A Deep Dive",
+      description:
+        "A comprehensive guide to understanding transformer architecture and its applications in modern AI.",
+      content:
+        "# The Future of AI\n\nArtificial Intelligence has come a long way...",
+      authors: [{ id: "sj1", name: "Sarah Johnson" }],
+      date: "2024-01-01T00:00:00.000Z",
+      tags: [
+        { id: "t15", name: "AI" },
+        { id: "t16", name: "Future Tech" },
+      ],
+      metrics: {
+        views: 25000,
+        comments: 150,
+      },
+      url: "https://example.com/article-1",
+      source: "Tech Review",
+      readTime: 8,
+    },
+    {
+      id: "7",
       type: "article",
       title: "A Comprehensive Guide to Transformer Architecture",
       description:
         "Deep dive into the architecture that revolutionized natural language processing and beyond.",
       content: "Full article content here...",
-      authors: [{ id: "sj1", name: "Sarah Johnson" }],
+      authors: [{ id: "sj2", name: "Sarah Johnson" }],
       date: "2023-01-15T00:00:00.000Z",
       tags: [
-        { id: "t1", name: "Transformers" },
-        { id: "t2", name: "Deep Learning" },
-        { id: "t3", name: "Tutorial" },
+        { id: "t17", name: "Transformers" },
+        { id: "t18", name: "Deep Learning" },
+        { id: "t19", name: "Tutorial" },
       ],
       metrics: {
         views: 50000,
@@ -132,32 +152,32 @@ export const mockCuratedContent: CuratedContent = {
       source: "AI Blog",
       readTime: 15,
     },
-    {
-      id: "article2",
-      type: "article",
-      title: "Understanding Large Language Models",
-      description:
-        "An overview of how large language models work and their impact on AI development.",
-      content: "Full article content here...",
-      authors: [{ id: "mc2", name: "Michael Chen" }],
-      date: "2023-02-20T00:00:00.000Z",
-      tags: [
-        { id: "t1", name: "LLM" },
-        { id: "t2", name: "AI" },
-        { id: "t3", name: "Machine Learning" },
-      ],
-      metrics: {
-        views: 40000,
-        comments: 123,
-      },
-      url: "https://example.com/llm-guide",
-      source: "AI Blog",
-      readTime: 12,
-    },
   ],
   discussions: [
     {
-      id: "discussion1",
+      id: "9",
+      type: "discussion",
+      title: "Best Practices for Training Large Language Models",
+      description:
+        "Community discussion about efficient training methods for LLMs.",
+      authors: [{ id: "ac1", name: "Alex Chen" }],
+      date: "2024-01-04T00:00:00.000Z",
+      tags: [
+        { id: "t23", name: "LLM" },
+        { id: "t24", name: "Training" },
+      ],
+      metrics: {
+        views: 5000,
+        comments: 75,
+      },
+      url: "https://example.com/discussion-1",
+      platform: "ML Forum",
+      threadUrl: "https://example.com/discussion-1",
+      participants: 30,
+      lastActivity: "2024-01-05T00:00:00.000Z",
+    },
+    {
+      id: "10",
       type: "discussion",
       title: "The Future of AI Safety",
       description:
@@ -165,9 +185,9 @@ export const mockCuratedContent: CuratedContent = {
       authors: [{ id: "asc1", name: "AI Safety Community" }],
       date: "2023-03-10T00:00:00.000Z",
       tags: [
-        { id: "t1", name: "AI Safety" },
-        { id: "t2", name: "Ethics" },
-        { id: "t3", name: "AI" },
+        { id: "t25", name: "AI Safety" },
+        { id: "t26", name: "Ethics" },
+        { id: "t27", name: "AI" },
       ],
       metrics: {
         views: 20000,
@@ -177,30 +197,7 @@ export const mockCuratedContent: CuratedContent = {
       platform: "AI Forum",
       threadUrl: "https://example.com/ai-safety-discussion",
       participants: 156,
-      lastActivity: "2024-01-04T12:00:00.000Z",
-    },
-    {
-      id: "discussion2",
-      type: "discussion",
-      title: "Scaling Laws in Machine Learning",
-      description:
-        "Exploring how model performance scales with compute, data, and model size.",
-      authors: [{ id: "mlr1", name: "ML Research Group" }],
-      date: "2023-04-05T00:00:00.000Z",
-      tags: [
-        { id: "t1", name: "Scaling" },
-        { id: "t2", name: "Machine Learning" },
-        { id: "t3", name: "Research" },
-      ],
-      metrics: {
-        views: 15000,
-        comments: 156,
-      },
-      url: "https://example.com/scaling-laws-discussion",
-      platform: "AI Forum",
-      threadUrl: "https://example.com/scaling-laws-discussion",
-      participants: 89,
-      lastActivity: "2024-01-04T12:00:00.000Z",
+      lastActivity: "2024-01-04T00:00:00.000Z",
     },
   ],
 };

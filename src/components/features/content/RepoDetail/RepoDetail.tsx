@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Star, GitFork, Link as LinkIcon, History, Eye } from "lucide-react";
-import { Markdown } from "@/components/common/Markdown";
+import { MarkdownViewer } from "@/components/common/ui/MarkdownViewer/MarkdownViewer";
 import type { Repository } from "@/lib/types/content";
 
 interface RepoDetailProps {
@@ -88,7 +88,7 @@ export function RepoDetail({ repo }: RepoDetailProps) {
         <TabsContent value="readme" className="mt-4">
           {repo.readme ? (
             <div className="prose max-w-none">
-              <Markdown>{repo.readme}</Markdown>
+              <MarkdownViewer>{repo.readme}</MarkdownViewer>
             </div>
           ) : (
             <p className="text-muted-foreground">No README available</p>
