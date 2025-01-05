@@ -21,6 +21,55 @@ export async function getFolders(): Promise<Folder[]> {
   return handleResponse<Folder[]>(response);
 }
 
+export async function getFolderById(folderId: string): Promise<Folder> {
+  const response = await fetch(`${API_BASE_URL}/folders/${folderId}`, {
+    credentials: "include",
+  });
+
+  return handleResponse<Folder>(response);
+}
+
+export async function getFolderContents(
+  folderId: string
+): Promise<BookmarkedItem[]> {
+  const response = await fetch(`${API_BASE_URL}/folders/${folderId}/contents`, {
+    credentials: "include",
+  });
+
+  return handleResponse<BookmarkedItem[]>(response);
+}
+
+export async function reorderFolderContents(
+  folderId: string,
+  orderedIds: string[]
+): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/folders/${folderId}/reorder`, {
+    method: "PATCH",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ orderedIds }),
+  });
+
+  await handleResponse<void>(response);
+}
+
+export async function removeFromFolder(
+  folderId: string,
+  itemId: string
+): Promise<void> {
+  const response = await fetch(
+    `${API_BASE_URL}/folders/${folderId}/items/${itemId}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    }
+  );
+
+  await handleResponse<void>(response);
+}
+
 export async function createFolder(data: {
   name: string;
   description?: string;
