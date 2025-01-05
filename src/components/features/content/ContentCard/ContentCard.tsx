@@ -17,6 +17,8 @@ import {
   Link as LinkIcon,
 } from "lucide-react";
 import type { ContentItem } from "@/lib/types/content";
+import { isPaper, isRepository, isDiscussion } from "@/lib/types/content";
+import { formatContentDate } from "@/lib/services/content";
 
 interface ContentCardProps {
   content: ContentItem;
@@ -25,45 +27,66 @@ interface ContentCardProps {
 
 export function ContentCard({ content, showActions = true }: ContentCardProps) {
   const renderMetrics = () => {
-    switch (content.type) {
-      case "paper":
-        return (
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              <FileText className="h-4 w-4" />
-              {content.citations} citations
-            </span>
-          </div>
-        );
-      case "repo":
-        return (
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              <Star className="h-4 w-4" />
-              {content.stars}
-            </span>
-            <span className="flex items-center gap-1">
-              <GitFork className="h-4 w-4" />
-              {content.forks}
-            </span>
-          </div>
-        );
-      case "discussion":
-        return (
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              <Users className="h-4 w-4" />
-              {content.participants} participants
-            </span>
+    if (isPaper(content) && content.metrics?.citations) {
+      return (
+        <div className="flex items-center gap-4">
+          <span className="flex items-center gap-1">
+            <FileText className="h-4 w-4" />
+            {content.metrics.citations.toLocaleString()} citations
+          </span>
+        </div>
+      );
+    }
+
+    if (isRepository(content)) {
+      return (
+        <div className="flex items-center gap-4">
+          <span className="flex items-center gap-1">
+            <Star className="h-4 w-4" />
+            {content.stars.toLocaleString()}
+          </span>
+          <span className="flex items-center gap-1">
+            <GitFork className="h-4 w-4" />
+            {content.forks.toLocaleString()}
+          </span>
+        </div>
+      );
+    }
+
+    if (isDiscussion(content)) {
+      return (
+        <div className="flex items-center gap-4">
+          <span className="flex items-center gap-1">
+            <Users className="h-4 w-4" />
+            {content.participants.toLocaleString()} participants
+          </span>
+          {content.metrics?.comments && (
             <span className="flex items-center gap-1">
               <MessageSquare className="h-4 w-4" />
-              {content.metrics.comments} comments
+              {content.metrics.comments.toLocaleString()} comments
             </span>
-          </div>
-        );
-      default:
-        return null;
+          )}
+        </div>
+      );
     }
+
+    return null;
+  };
+
+  const renderAuthor = () => {
+    if (isPaper(content)) {
+      return (
+        <p className="text-sm text-muted-foreground mt-1">
+          By {content.authors.map((author) => author.name).join(", ")}
+        </p>
+      );
+    }
+
+    return (
+      <p className="text-sm text-muted-foreground mt-1">
+        By {content.author.name}
+      </p>
+    );
   };
 
   return (
@@ -77,11 +100,9 @@ export function ContentCard({ content, showActions = true }: ContentCardProps) {
             >
               {content.title}
             </Link>
-            <p className="text-sm text-muted-foreground mt-1">
-              By {content.authors.map((author) => author.name).join(", ")}
-            </p>
+            {renderAuthor()}
           </div>
-          <div className="px-2 py-1 rounded-full bg-secondary text-xs font-medium">
+          <div className="px-2 py-1 rounded-full bg-secondary text-xs font-medium capitalize">
             {content.type}
           </div>
         </div>
@@ -90,23 +111,25 @@ export function ContentCard({ content, showActions = true }: ContentCardProps) {
       <CardContent>
         <p className="text-sm line-clamp-3">{content.description}</p>
 
-        <div className="flex flex-wrap gap-2 mt-4">
-          {content.tags.map((tag) => (
-            <div
-              key={tag.id}
-              className="px-2 py-1 rounded-full bg-secondary text-xs"
-            >
-              {tag.name}
-            </div>
-          ))}
-        </div>
+        {content.tags && content.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-4">
+            {content.tags.map((tag) => (
+              <div
+                key={tag}
+                className="px-2 py-1 rounded-full bg-secondary text-xs"
+              >
+                {tag}
+              </div>
+            ))}
+          </div>
+        )}
       </CardContent>
 
       <CardFooter className="flex items-center justify-between text-sm text-muted-foreground">
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1">
             <Calendar className="h-4 w-4" />
-            {new Date(content.date).toLocaleDateString()}
+            {formatContentDate(content.createdAt)}
           </span>
           {content.url && (
             <a

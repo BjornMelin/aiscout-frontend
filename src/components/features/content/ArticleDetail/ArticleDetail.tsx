@@ -9,8 +9,8 @@ import {
   MessageSquare,
   Bookmark,
 } from "lucide-react";
-import { Markdown } from "@/components/common/Markdown";
 import type { Article } from "@/lib/types/content";
+import { formatContentDate } from "@/lib/services/content";
 
 interface ArticleDetailProps {
   article: Article;
@@ -26,7 +26,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
             Article
           </div>
           <span className="text-muted-foreground">
-            Published on {new Date(article.date).toLocaleDateString()}
+            Published on {formatContentDate(article.createdAt)}
           </span>
           {article.readTime && (
             <span className="flex items-center gap-1 text-muted-foreground">
@@ -37,30 +37,22 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-4">
-        {article.authors.map((author) => (
-          <div key={author.id} className="flex items-center gap-2">
-            {author.avatar ? (
-              <Image
-                src={author.avatar}
-                alt={author.name}
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-            ) : (
-              <div className="h-8 w-8 rounded-full bg-secondary" />
-            )}
-            <div>
-              <p className="font-medium">{author.name}</p>
-              {author.affiliation && (
-                <p className="text-sm text-muted-foreground">
-                  {author.affiliation}
-                </p>
-              )}
-            </div>
-          </div>
-        ))}
+      <div className="flex items-center gap-2">
+        {article.author.avatar ? (
+          <Image
+            src={article.author.avatar}
+            alt={article.author.name}
+            width={32}
+            height={32}
+            className="rounded-full"
+          />
+        ) : (
+          <div className="h-8 w-8 rounded-full bg-secondary" />
+        )}
+        <div>
+          <p className="font-medium">{article.author.name}</p>
+          <p className="text-sm text-muted-foreground">{article.source}</p>
+        </div>
       </div>
 
       <div className="flex gap-4">
@@ -77,7 +69,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
       </div>
 
       <div className="prose max-w-none">
-        <Markdown>{article.content}</Markdown>
+        <p className="text-lg text-muted-foreground">{article.description}</p>
       </div>
 
       <div>
@@ -89,7 +81,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
               <p className="text-sm text-muted-foreground">Views</p>
             </div>
             <p className="text-2xl font-semibold mt-2">
-              {article.metrics.views}
+              {article.metrics?.views?.toLocaleString() || 0}
             </p>
           </Card>
           <Card className="p-4">
@@ -98,34 +90,36 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
               <p className="text-sm text-muted-foreground">Comments</p>
             </div>
             <p className="text-2xl font-semibold mt-2">
-              {article.metrics.comments || 0}
+              {article.metrics?.comments?.toLocaleString() || 0}
             </p>
           </Card>
           <Card className="p-4">
             <div className="flex items-center gap-2">
               <Bookmark className="h-4 w-4 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">Saves</p>
+              <p className="text-sm text-muted-foreground">Likes</p>
             </div>
             <p className="text-2xl font-semibold mt-2">
-              {/* TODO: Add saves count when available */}-
+              {article.metrics?.likes?.toLocaleString() || 0}
             </p>
           </Card>
         </div>
       </div>
 
-      <div>
-        <h2 className="text-xl font-semibold mb-4">Tags</h2>
-        <div className="flex flex-wrap gap-2">
-          {article.tags.map((tag) => (
-            <div
-              key={tag.id}
-              className="px-3 py-1 rounded-full bg-secondary text-sm"
-            >
-              {tag.name}
-            </div>
-          ))}
+      {article.tags && (
+        <div>
+          <h2 className="text-xl font-semibold mb-4">Tags</h2>
+          <div className="flex flex-wrap gap-2">
+            {article.tags.map((tag) => (
+              <div
+                key={tag}
+                className="px-3 py-1 rounded-full bg-secondary text-sm"
+              >
+                {tag}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <div>
         <h2 className="text-xl font-semibold mb-4">Source</h2>
