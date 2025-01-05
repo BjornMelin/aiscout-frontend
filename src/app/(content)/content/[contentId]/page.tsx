@@ -60,22 +60,18 @@ function ContentDetail({ content }: { content: ContentItem }) {
 }
 
 export default async function ContentPage({ params }: ContentPageProps) {
-  let content: ContentItem;
-
   try {
-    content = await getContent(params.contentId);
-  } catch (error) {
-    console.error("Failed to fetch content:", error);
-    return notFound();
+    const content = await getContent(params.contentId);
+    return (
+      <div className="container py-8">
+        <ErrorBoundary>
+          <Suspense fallback={<ContentDetailSkeleton />}>
+            <ContentDetail content={content} />
+          </Suspense>
+        </ErrorBoundary>
+      </div>
+    );
+  } catch {
+    notFound();
   }
-
-  return (
-    <div className="container py-8">
-      <ErrorBoundary>
-        <Suspense fallback={<ContentDetailSkeleton />}>
-          <ContentDetail content={content} />
-        </Suspense>
-      </ErrorBoundary>
-    </div>
-  );
 }
