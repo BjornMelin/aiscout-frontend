@@ -14,6 +14,7 @@ export interface BookmarkedItem {
   id: string;
   contentId: string;
   contentType: "paper" | "repo" | "article" | "discussion";
+  title: string;
   addedAt: Date;
   folderId?: string;
   note?: string;
