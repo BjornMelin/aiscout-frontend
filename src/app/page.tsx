@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { HeroSection } from "@/components/features/home/HeroSection/HeroSection";
 import { CuratedContentSection } from "@/components/features/home/CuratedContentSection/CuratedContentSection";
 import { HomeTrendingSection } from "@/components/features/home/HomeTrendingSection/HomeTrendingSection";
-import { HomeErrorBoundary } from "@/components/features/home/HomeErrorBoundary";
+import { HomeErrorBoundary } from "@/components/features/home/HomeErrorBoundary/HomeErrorBoundary";
 
 export const metadata = {
   title: "AIScout - Discover AI/ML Content",
