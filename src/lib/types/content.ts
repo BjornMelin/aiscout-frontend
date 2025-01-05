@@ -68,3 +68,5 @@ export interface Discussion extends BaseContent {
 }
 
 export type ContentItem = ResearchPaper | Repository | Article | Discussion;
+
+export type ContentMap = Record<string, ContentItem>;

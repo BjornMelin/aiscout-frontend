@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -9,7 +11,7 @@ import {
   MessageSquare,
   Bookmark,
 } from "lucide-react";
-import { Markdown } from "@/components/common/Markdown";
+import { MarkdownViewer } from "@/components/common/ui/MarkdownViewer/MarkdownViewer";
 import type { Article } from "@/lib/types/content";
 
 interface ArticleDetailProps {
@@ -77,7 +79,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
       </div>
 
       <div className="prose max-w-none">
-        <Markdown>{article.content}</Markdown>
+        <MarkdownViewer>{article.content}</MarkdownViewer>
       </div>
 
       <div>

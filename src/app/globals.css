@@ -77,4 +77,67 @@
   body {
     @apply bg-background text-foreground;
   }
+  pre {
+    @apply text-foreground bg-muted !important;
+  }
+}
+
+@layer utilities {
+  .token.comment,
+  .token.prolog,
+  .token.doctype,
+  .token.cdata {
+    @apply text-muted-foreground;
+  }
+
+  .token.punctuation {
+    @apply text-foreground opacity-60;
+  }
+
+  .token.property,
+  .token.tag,
+  .token.boolean,
+  .token.number,
+  .token.constant,
+  .token.symbol {
+    @apply text-primary;
+  }
+
+  .token.selector,
+  .token.attr-name,
+  .token.string,
+  .token.char,
+  .token.builtin {
+    @apply text-primary opacity-90;
+  }
+
+  .token.operator,
+  .token.entity,
+  .token.url,
+  .token.variable {
+    @apply text-foreground;
+  }
+
+  .token.atrule,
+  .token.attr-value,
+  .token.keyword {
+    @apply text-primary font-medium;
+  }
+
+  .token.function {
+    @apply text-foreground font-medium;
+  }
+
+  .token.regex,
+  .token.important {
+    @apply text-primary opacity-90;
+  }
+
+  .token.deleted {
+    @apply text-destructive;
+  }
+
+  .token.inserted {
+    @apply text-primary;
+  }
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -9,7 +11,7 @@ import {
   Eye,
   History,
 } from "lucide-react";
-import { Markdown } from "@/components/common/Markdown";
+import { MarkdownViewer } from "@/components/common/ui/MarkdownViewer/MarkdownViewer";
 import type { Discussion } from "@/lib/types/content";
 
 interface DiscussionDetailProps {
@@ -85,7 +87,7 @@ export function DiscussionDetail({ discussion }: DiscussionDetailProps) {
       </div>
 
       <div className="prose max-w-none">
-        <Markdown>{discussion.description}</Markdown>
+        <MarkdownViewer>{discussion.description}</MarkdownViewer>
       </div>
 
       <div>
