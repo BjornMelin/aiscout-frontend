@@ -1,3 +1,6 @@
+/**
+ * Author information in a citation
+ */
 interface Author {
   given: string;
   family: string;
@@ -8,6 +11,9 @@ interface Author {
   "non-dropping-particle"?: string;
 }
 
+/**
+ * Date information in a citation
+ */
 interface DateParts {
   "date-parts": [number, number?, number?][];
   raw?: string;
@@ -15,6 +21,9 @@ interface DateParts {
   circa?: boolean;
 }
 
+/**
+ * Core citation data structure
+ */
 interface CitationData {
   id?: string;
   title: string;
@@ -44,6 +53,9 @@ interface CitationData {
   keywords?: string[];
 }
 
+/**
+ * Options for bibliography formatting
+ */
 interface BibliographyOptions {
   template?: "apa" | "vancouver" | "harvard1" | string;
   lang?: string;
@@ -52,6 +64,9 @@ interface BibliographyOptions {
   maxOffset?: number;
 }
 
+/**
+ * Options for BibTeX formatting
+ */
 interface BibtexOptions {
   type?: string;
   format?: "text" | "html";
