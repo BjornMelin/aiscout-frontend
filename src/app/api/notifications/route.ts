@@ -67,7 +67,7 @@ export async function POST(request: Request) {
 }
 
 // DELETE /api/notifications
-export async function DELETE(request: Request) {
+export async function DELETE() {
   // Simulate network delay
   await new Promise((resolve) => setTimeout(resolve, 200));
 
