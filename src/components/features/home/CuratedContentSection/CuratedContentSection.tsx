@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { useHomePageStore } from "@/lib/store/home";
-import type { ContentItem } from "@/lib/types/home";
+import type { ContentItem } from "@/lib/types/content";
 
 function CuratedContentSkeleton() {
   return (

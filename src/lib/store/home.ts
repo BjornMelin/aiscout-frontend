@@ -1,5 +1,14 @@
 import { create } from "zustand";
-import type { HomePageStore, CuratedContent } from "../types/home";
+import type { CuratedContent } from "@/lib/types/content";
+
+interface HomePageStore {
+  curatedContent: CuratedContent;
+  isLoading: boolean;
+  error: Error | null;
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+  fetch: () => Promise<void>;
+}
 
 const INITIAL_CONTENT: CuratedContent = {
   papers: [],

@@ -1,20 +1,25 @@
 import { Cite } from "@citation-js/core";
 import "@citation-js/plugin-bibtex";
-import type { ResearchPaper } from "@/lib/types/content";
+import type { ContentItem } from "@/lib/types/content";
+import { isPaper } from "@/lib/types/content";
 
 export function generateCitation(
-  paper: ResearchPaper,
+  content: ContentItem,
   format: "bibtex" | "apa"
 ): string {
+  if (!isPaper(content)) {
+    throw new Error("Content is not a paper");
+  }
+
   const cite = new Cite({
-    title: paper.title,
-    author: paper.authors.map((author) => ({
+    title: content.title,
+    author: content.authors.map((author) => ({
       given: author.name.split(" ")[0],
       family: author.name.split(" ").slice(1).join(" "),
     })),
-    issued: { "date-parts": [[new Date(paper.date).getFullYear()]] },
-    DOI: paper.doi,
-    "container-title": paper.journal,
+    issued: { "date-parts": [[new Date(content.publishedDate).getFullYear()]] },
+    DOI: content.doi,
+    "container-title": content.journal,
     type: "article-journal",
   });
 
