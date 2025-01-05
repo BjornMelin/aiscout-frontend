@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { BellIcon } from "@heroicons/react/24/outline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SearchBar } from "@/components/features/search/SearchBar/SearchBar";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { NotificationIcon } from "@/components/features/notifications/NotificationIcon/NotificationIcon";
 
 /**
  * Header component for the AIScout application.
@@ -51,12 +51,7 @@ export default function Header() {
         {/* Right Section: Theme, Notifications & Profile */}
         <div className="ml-auto flex items-center space-x-4">
           <ThemeToggle />
-          <button
-            className="rounded-full hover:bg-accent hover:text-accent-foreground p-2"
-            aria-label="Notifications"
-          >
-            <BellIcon className="h-5 w-5" />
-          </button>
+          <NotificationIcon />
 
           {isLoggedIn ? (
             <Avatar>
