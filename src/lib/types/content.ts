@@ -35,13 +35,6 @@ export interface BaseContent {
   featured: boolean;
 }
 
-export interface CuratedSection {
-  id: string;
-  title: string;
-  description: string;
-  items: BaseContent[];
-}
-
 export interface Paper extends BaseContent {
   type: "paper";
   abstract: string;

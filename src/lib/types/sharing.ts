@@ -1,5 +1,5 @@
 import { ContentType } from "@/lib/types/shared";
-import { AuthUser } from "@/lib/types/user";
+import { AuthUser } from "@/lib/types/userAuth";
 
 export type SharePermission = "view" | "edit" | "comment";
 export type ExportFormat = "pdf" | "bibtex" | "markdown" | "json";

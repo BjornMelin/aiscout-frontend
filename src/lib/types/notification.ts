@@ -1,8 +1,11 @@
+import { ContentType } from "@/lib/types/shared";
+
 export type NotificationType =
   | "share"
   | "comment"
   | "follow"
   | "mention"
+  | "collaboration_invite"
   | "system";
 
 export interface NotificationData {
@@ -11,14 +14,16 @@ export interface NotificationData {
   title: string;
   message: string;
   createdAt: Date;
-  read: boolean;
-  actionUrl?: string;
+  link?: string;
+  isRead: boolean;
+  sender: {
+    id: string;
+    name: string;
+    avatar?: string;
+  };
   metadata?: {
     contentId?: string;
-    contentType?: string;
-    senderId?: string;
-    senderName?: string;
-    senderAvatar?: string;
+    contentType?: ContentType;
     folderId?: string;
     folderName?: string;
   };
