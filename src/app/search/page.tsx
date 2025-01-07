@@ -4,7 +4,7 @@ import { SearchFilters } from "@/components/features/search/SearchFilters/Search
 import { SearchResultCard } from "@/components/features/search/SearchResultCard/SearchResultCard";
 import { Skeleton } from "@/components/ui/skeleton";
 // import type { SearchResult } from "@/lib/types/search";
-import { MOCK_RESULTS } from "@/data/mock/search-results";
+import { MOCK_RESULTS } from "@/data/mock/mock-search-results";
 
 async function SearchResults({
   searchParams,
