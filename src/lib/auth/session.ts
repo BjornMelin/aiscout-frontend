@@ -2,7 +2,8 @@ import { getServerSession } from "next-auth";
 import { cache } from "react";
 import { authConfig } from "./config";
 import type { Session } from "next-auth";
-import type { UserProfile } from "../types/user";
+import type { UserProfile } from "@/lib/types/userAuth";
+import { getUserDisplayImage } from "@/lib/types/userAuth";
 
 export class AuthError extends Error {
   constructor(message: string) {
@@ -43,7 +44,11 @@ export async function getCurrentUser(): Promise<UserProfile | null> {
       throw new AuthError(error.message || "Failed to fetch user profile");
     }
 
-    return response.json();
+    const profile = await response.json();
+    return {
+      ...profile,
+      displayImage: getUserDisplayImage(profile),
+    };
   } catch (error) {
     console.error("Error fetching user profile:", error);
     return null;
