@@ -1,55 +1,69 @@
 # LiveRegion Component
 
-The LiveRegion component provides an accessible way to announce dynamic content changes to screen readers.
+A component for announcing dynamic content changes to screen readers, improving accessibility for users with visual impairments.
 
 ## Features
 
-- ARIA live region for screen reader announcements
-- Configurable message timeout
-- Automatic cleanup
-- Polite announcement mode
-- Invisible to sighted users
+- Announces content changes to screen readers
+- Configurable message duration
+- Customizable ARIA roles and politeness levels
+- Automatically cleans up after message timeout
+- Screen reader only (visually hidden)
+
+## Props
+
+| Prop       | Type                               | Required | Default    | Description                          |
+| ---------- | ---------------------------------- | -------- | ---------- | ------------------------------------ |
+| message    | `string`                           | Yes      | -          | The message to be announced          |
+| timeout    | `number`                           | No       | `5000`     | Time in ms before message is removed |
+| role       | `"status" \| "alert" \| "log"`     | No       | `"status"` | ARIA role for the live region        |
+| politeness | `"polite" \| "assertive" \| "off"` | No       | `"polite"` | ARIA live region politeness setting  |
 
 ## Usage
 
 ```tsx
 import { LiveRegion } from "@/components/features/home/LiveRegion/LiveRegion";
 
-export function ContentSection() {
-  return (
-    <div>
-      <ContentList />
-      <LiveRegion message="New content loaded" timeout={3000} />
-    </div>
-  );
-}
+// Basic usage
+<LiveRegion message="Content has been updated" />
+
+// With custom timeout and role
+<LiveRegion
+  message="Error loading content"
+  timeout={3000}
+  role="alert"
+  politeness="assertive"
+/>
 ```
-
-## Props
-
-| Name     | Type   | Description                                                    |
-| -------- | ------ | -------------------------------------------------------------- |
-| message  | string | The message to be announced                                    |
-| timeout? | number | Time in milliseconds before message is cleared (default: 5000) |
-
-## Technical Details
-
-- Uses React's useEffect for cleanup
-- Implements ARIA live region
-- Screen reader only visibility
-- Automatic state management
-- Configurable timing
 
 ## Accessibility
 
-- Uses aria-live="polite" for non-intrusive announcements
-- Properly hidden from visual display
-- Respects user's screen reader settings
-- Clean message queue management
+The component follows ARIA best practices for live regions:
 
-## Best Practices
+- Uses appropriate ARIA roles and attributes
+- Supports different politeness levels
+- Ensures announcements are clear and concise
+- Automatically manages announcement timing
 
-- Keep messages concise and meaningful
-- Use polite announcements for non-critical updates
-- Clear messages after appropriate timeout
-- Avoid rapid successive announcements
+## Common Use Cases
+
+- Announcing loading states
+- Confirming successful actions
+- Alerting users to errors
+- Announcing dynamic content updates
+- Providing feedback for async operations
+
+## Styling
+
+- Visually hidden using `sr-only` class
+- No visual impact on the UI
+- Maintains accessibility without affecting layout
+
+## Testing
+
+The component should be tested for:
+
+- Message announcement functionality
+- Timeout behavior
+- Role and politeness attribute rendering
+- Component cleanup on unmount

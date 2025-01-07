@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { mockTrendingTopics } from "@/data/mock/trending";
+import { mockTrendingTopics } from "@/data/mock/mock-trending";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";

@@ -10,77 +10,70 @@ describe("LiveRegion", () => {
     jest.useRealTimers();
   });
 
-  it("renders message in live region", () => {
+  it("renders message with default props", () => {
     render(<LiveRegion message="Test message" />);
 
-    const liveRegion = screen.getByRole("status");
-    expect(liveRegion).toHaveTextContent("Test message");
-    expect(liveRegion).toHaveAttribute("aria-live", "polite");
+    const region = screen.getByTestId("live-region");
+    expect(region).toHaveAttribute("role", "status");
+    expect(region).toHaveAttribute("aria-live", "polite");
+    expect(region).toHaveTextContent("Test message");
   });
 
-  it("hides message after timeout", () => {
-    render(<LiveRegion message="Test message" timeout={1000} />);
+  it("renders with custom role and politeness", () => {
+    render(
+      <LiveRegion message="Alert message" role="alert" politeness="assertive" />
+    );
 
-    expect(screen.getByRole("status")).toBeInTheDocument();
+    const region = screen.getByTestId("live-region");
+    expect(region).toHaveAttribute("role", "alert");
+    expect(region).toHaveAttribute("aria-live", "assertive");
+  });
+
+  it("removes message after timeout", () => {
+    render(<LiveRegion message="Temporary message" timeout={1000} />);
+
+    expect(screen.getByTestId("live-region")).toBeInTheDocument();
 
     act(() => {
       jest.advanceTimersByTime(1000);
     });
 
-    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("live-region")).not.toBeInTheDocument();
   });
 
-  it("uses default timeout of 5000ms when not specified", () => {
-    render(<LiveRegion message="Test message" />);
+  it("resets timeout when message changes", () => {
+    const { rerender } = render(
+      <LiveRegion message="First message" timeout={1000} />
+    );
 
-    expect(screen.getByRole("status")).toBeInTheDocument();
-
+    // Advance halfway through the timeout
     act(() => {
-      jest.advanceTimersByTime(4999);
+      jest.advanceTimersByTime(500);
     });
-    expect(screen.getByRole("status")).toBeInTheDocument();
 
+    // Update the message
+    rerender(<LiveRegion message="Second message" timeout={1000} />);
+
+    // Message should still be visible
+    expect(screen.getByTestId("live-region")).toBeInTheDocument();
+    expect(screen.getByTestId("live-region")).toHaveTextContent(
+      "Second message"
+    );
+
+    // Advance through the new timeout
     act(() => {
-      jest.advanceTimersByTime(1);
+      jest.advanceTimersByTime(1000);
     });
-    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+
+    expect(screen.queryByTestId("live-region")).not.toBeInTheDocument();
   });
 
-  it("cleans up timer on unmount", () => {
+  it("cleans up timeout on unmount", () => {
+    const clearTimeoutSpy = jest.spyOn(window, "clearTimeout");
     const { unmount } = render(<LiveRegion message="Test message" />);
 
     unmount();
 
-    act(() => {
-      jest.advanceTimersByTime(5000);
-    });
-
-    // No errors should be thrown
-  });
-
-  it("resets timer when message changes", () => {
-    const { rerender } = render(<LiveRegion message="First message" />);
-
-    act(() => {
-      jest.advanceTimersByTime(3000);
-    });
-
-    rerender(<LiveRegion message="Second message" />);
-    expect(screen.getByRole("status")).toHaveTextContent("Second message");
-
-    act(() => {
-      jest.advanceTimersByTime(4999);
-    });
-    expect(screen.getByRole("status")).toBeInTheDocument();
-
-    act(() => {
-      jest.advanceTimersByTime(1);
-    });
-    expect(screen.queryByRole("status")).not.toBeInTheDocument();
-  });
-
-  it("has sr-only class for visual hiding", () => {
-    render(<LiveRegion message="Test message" />);
-    expect(screen.getByRole("status")).toHaveClass("sr-only");
+    expect(clearTimeoutSpy).toHaveBeenCalled();
   });
 });

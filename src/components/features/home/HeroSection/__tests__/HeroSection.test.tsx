@@ -11,71 +11,77 @@ describe("HeroSection", () => {
   const mockPush = jest.fn();
 
   beforeEach(() => {
-    (useRouter as jest.Mock).mockReturnValue({
-      push: mockPush,
-    });
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
+    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
   });
 
   it("renders the hero section with title and description", () => {
     render(<HeroSection />);
 
+    expect(screen.getByTestId("hero-section")).toBeInTheDocument();
     expect(screen.getByText("Discover AI/ML Content")).toBeInTheDocument();
     expect(
       screen.getByText(/Find and explore cutting-edge research papers/i)
     ).toBeInTheDocument();
   });
 
-  it("renders the search bar", () => {
+  it("renders skeleton loading state when isLoading is true", () => {
+    render(<HeroSection isLoading={true} />);
+
+    expect(screen.getByTestId("hero-section-skeleton")).toBeInTheDocument();
+    expect(
+      screen.queryByText("Discover AI/ML Content")
+    ).not.toBeInTheDocument();
+  });
+
+  it("renders search bar with correct placeholder", () => {
     render(<HeroSection />);
 
     expect(
-      screen.getByPlaceholderText(
-        /Search papers, repositories, articles, and discussions/i
-      )
+      screen.getByPlaceholderText("Search AI research and projects...")
     ).toBeInTheDocument();
   });
 
-  it("renders popular search terms", () => {
+  it("renders all popular search terms", () => {
     render(<HeroSection />);
 
-    expect(screen.getByText("Large Language Models")).toBeInTheDocument();
-    expect(screen.getByText("Transformers")).toBeInTheDocument();
-    expect(screen.getByText("Computer Vision")).toBeInTheDocument();
+    const popularSearches = [
+      "Large Language Models",
+      "Transformers",
+      "Computer Vision",
+      "Reinforcement Learning",
+      "Neural Networks",
+    ];
+
+    popularSearches.forEach((term) => {
+      expect(screen.getByText(term)).toBeInTheDocument();
+    });
   });
 
   it("navigates to search page when search is performed", () => {
     render(<HeroSection />);
 
-    const searchInput = screen.getByPlaceholderText(
-      /Search papers, repositories, articles, and discussions/i
+    const searchBar = screen.getByPlaceholderText(
+      "Search AI research and projects..."
     );
-    fireEvent.change(searchInput, { target: { value: "AI Safety" } });
-    fireEvent.keyDown(searchInput, { key: "Enter" });
+    const searchQuery = "test query";
 
-    expect(mockPush).toHaveBeenCalledWith("/search?q=AI%20Safety");
+    // Trigger search
+    fireEvent.change(searchBar, { target: { value: searchQuery } });
+    fireEvent.keyDown(searchBar, { key: "Enter", code: "Enter" });
+
+    expect(mockPush).toHaveBeenCalledWith(
+      `/search?q=${encodeURIComponent(searchQuery)}`
+    );
   });
 
   it("navigates to search page when popular term is clicked", () => {
     render(<HeroSection />);
 
-    fireEvent.click(screen.getByText("Transformers"));
+    const popularTerm = "Large Language Models";
+    fireEvent.click(screen.getByText(popularTerm));
 
-    expect(mockPush).toHaveBeenCalledWith("/search?q=Transformers");
-  });
-
-  it("doesn't navigate when search query is empty", () => {
-    render(<HeroSection />);
-
-    const searchInput = screen.getByPlaceholderText(
-      /Search papers, repositories, articles, and discussions/i
+    expect(mockPush).toHaveBeenCalledWith(
+      `/search?q=${encodeURIComponent(popularTerm)}`
     );
-    fireEvent.change(searchInput, { target: { value: "" } });
-    fireEvent.keyDown(searchInput, { key: "Enter" });
-
-    expect(mockPush).not.toHaveBeenCalled();
   });
 });

@@ -1,42 +1,70 @@
 # HeroSection Component
 
-The HeroSection component is the main banner section displayed at the top of the home page. It provides a search interface and quick access to popular search terms.
+A hero section component that displays a search bar and popular search terms for the AI/ML content discovery platform.
 
 ## Features
 
-- Animated entrance with Framer Motion
+- Large title and descriptive text
 - Search bar with autocomplete
-- Popular search terms as clickable buttons
+- Popular search terms as clickable badges
+- Loading state with skeleton UI
 - Responsive design
+
+## Props
+
+| Prop      | Type      | Required | Default | Description                                    |
+| --------- | --------- | -------- | ------- | ---------------------------------------------- |
+| isLoading | `boolean` | No       | `false` | Whether the component is in a loading state    |
 
 ## Usage
 
 ```tsx
 import { HeroSection } from "@/components/features/home/HeroSection/HeroSection";
 
-export default function HomePage() {
-  return (
-    <main>
-      <HeroSection />
-    </main>
-  );
-}
+// Basic usage
+<HeroSection />
+
+// With loading state
+<HeroSection isLoading={true} />
 ```
 
-## Props
+## Loading State
 
-This component doesn't accept any props as it's self-contained.
+When `isLoading` is true, the component displays a skeleton UI that includes:
+- Placeholder for the title
+- Placeholder for the description
+- Placeholder for the search bar
+- Placeholders for popular search terms
 
-## Technical Details
+The skeleton UI maintains the same layout and spacing as the loaded content, providing a smooth transition when data becomes available.
 
-- Uses `framer-motion` for animations
-- Integrates with the search functionality through the SearchBar component
-- Handles navigation using Next.js router
-- Implements responsive design using Tailwind CSS
+## Search Functionality
 
-## Accessibility
+- The search bar accepts user input and triggers a search on Enter
+- Popular search terms can be clicked to instantly search for that term
+- All searches navigate to the search page with the appropriate query parameter
 
-- Search bar is keyboard accessible
-- Popular search terms are properly labeled
-- Proper heading hierarchy
-- High contrast text for readability
+## Popular Searches
+
+The component includes a predefined list of popular search terms:
+- Large Language Models
+- Transformers
+- Computer Vision
+- Reinforcement Learning
+- Neural Networks
+
+## Styling
+
+- Uses Tailwind CSS for styling
+- Responsive design that adapts to different screen sizes
+- Consistent with the application's design system
+- Uses shadcn/ui components for UI elements
+
+## Testing
+
+The component includes comprehensive tests that cover:
+- Rendering of all main elements
+- Loading state display
+- Search functionality
+- Popular search term interactions
+- Navigation behavior 

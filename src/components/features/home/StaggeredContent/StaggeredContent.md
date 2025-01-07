@@ -1,56 +1,74 @@
 # StaggeredContent Component
 
-The StaggeredContent component provides an animated grid layout that reveals content items in a staggered sequence as they enter the viewport.
+A component that displays content items with a staggered animation effect as they enter the viewport, with support for loading states.
 
 ## Features
 
-- Staggered animation on scroll
+- Staggered animation on content entry
 - Intersection observer for viewport detection
-- Customizable animation timing
-- Reusable with any content items
-- Optional CSS class customization
+- Loading state with skeleton UI
+- Configurable animation timing
+- Responsive layout
+
+## Props
+
+| Prop          | Type            | Required | Default | Description                             |
+| ------------- | --------------- | -------- | ------- | --------------------------------------- |
+| items         | `ContentItem[]` | Yes      | -       | Array of content items to display       |
+| className     | `string`        | No       | -       | Additional CSS classes for container    |
+| isLoading     | `boolean`       | No       | `false` | Whether the content is in loading state |
+| skeletonCount | `number`        | No       | `3`     | Number of skeleton items to show        |
 
 ## Usage
 
 ```tsx
 import { StaggeredContent } from "@/components/features/home/StaggeredContent/StaggeredContent";
-import type { ContentItem } from "@/lib/types/content";
 
-export function ContentGrid({ items }: { items: ContentItem[] }) {
-  return (
-    <StaggeredContent
-      items={items}
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-    />
-  );
-}
+// Basic usage
+<StaggeredContent items={contentItems} />
+
+// With loading state
+<StaggeredContent
+  items={contentItems}
+  isLoading={true}
+  skeletonCount={5}
+  className="grid gap-4"
+/>
 ```
-
-## Props
-
-| Name       | Type          | Description                            |
-| ---------- | ------------- | -------------------------------------- |
-| items      | ContentItem[] | Array of content items to display      |
-| className? | string        | Optional CSS classes for the container |
-
-## Technical Details
-
-- Uses Framer Motion for animations
-- Implements react-intersection-observer for viewport detection
-- Custom animation controls for staggered effect
-- Integrates with ContentCard component
-- Responsive design support
 
 ## Animation
 
-- Fade in and slide up animation
-- 100ms delay between each item
-- Triggers when 10% of element is in viewport
-- One-time animation (doesn't repeat on re-entry)
+The component uses Framer Motion for animations:
 
-## Performance
+- Items fade in and slide up
+- Staggered delay between items (0.1s)
+- Smooth easing function
+- Triggers when content enters viewport
+- One-time animation per item
 
-- Lazy animation triggering
-- Optimized re-renders
-- Efficient intersection observer usage
-- Minimal layout shifts
+## Loading State
+
+When `isLoading` is true:
+
+- Displays skeleton UI placeholders
+- Maintains same layout as content
+- Configurable number of placeholder items
+- Smooth transition to content
+
+## Styling
+
+- Uses Tailwind CSS for layout
+- Consistent spacing between items
+- Responsive design support
+- Compatible with grid and flex layouts
+- Uses shadcn/ui skeleton component
+
+## Testing
+
+The component should be tested for:
+
+- Animation triggering
+- Loading state display
+- Intersection observer behavior
+- Content rendering
+- Skeleton UI rendering

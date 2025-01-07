@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,10 +9,15 @@ import Link from "next/link";
 import type { ContentItem } from "@/lib/types/content";
 
 interface CuratedSectionProps {
+  /** Array of content items to display */
   items: ContentItem[];
+  /** Type of content being displayed */
   type: ContentItem["type"];
 }
 
+/**
+ * Card component for displaying individual content items
+ */
 function CuratedContentCard({ item }: { item: ContentItem }) {
   return (
     <Card className="hover:bg-accent/50 transition-colors">
@@ -86,9 +92,14 @@ function CuratedContentCard({ item }: { item: ContentItem }) {
   );
 }
 
+/**
+ * CuratedSection component displays a grid of curated content items
+ * @param props CuratedSectionProps
+ * @returns React component
+ */
 export function CuratedSection({ items, type }: CuratedSectionProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="curated-section">
       <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
         {items.map((item) => (
           <CuratedContentCard key={item.id} item={item} />

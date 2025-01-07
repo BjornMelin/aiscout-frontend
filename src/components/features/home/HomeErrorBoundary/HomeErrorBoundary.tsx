@@ -2,6 +2,8 @@
 
 import { Component, ErrorInfo, ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertTriangle } from "lucide-react";
 
 interface Props {
   children: ReactNode;
@@ -29,12 +31,18 @@ export class HomeErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center min-h-screen p-4">
-          <h1 className="text-2xl font-bold mb-4">Something went wrong</h1>
-          <p className="text-muted-foreground mb-6">
-            {this.state.error?.message || "An unexpected error occurred"}
-          </p>
+        <div className="flex flex-col items-center justify-center min-h-[400px] p-8">
+          <Alert variant="destructive" className="max-w-lg">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Something went wrong</AlertTitle>
+            <AlertDescription>
+              {this.state.error?.message ||
+                "An unexpected error occurred while loading the home page"}
+            </AlertDescription>
+          </Alert>
           <Button
+            variant="default"
+            className="mt-6"
             onClick={() => {
               this.setState({ hasError: false, error: null });
               window.location.reload();

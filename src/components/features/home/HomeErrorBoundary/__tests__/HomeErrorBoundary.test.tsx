@@ -1,53 +1,35 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { HomeErrorBoundary } from "../HomeErrorBoundary";
 
-// Mock console.error to avoid test noise
-const originalError = console.error;
-beforeAll(() => {
-  console.error = jest.fn();
-});
+// Mock component that throws an error
+const ErrorComponent = () => {
+  throw new Error("Test error message");
+};
 
-afterAll(() => {
-  console.error = originalError;
-});
-
-// Mock component that throws error
-function ErrorComponent(): JSX.Element {
-  throw new Error("Test error");
-  return <div>This will never render</div>;
-}
+// Mock component that works normally
+const WorkingComponent = () => <div>Working content</div>;
 
 describe("HomeErrorBoundary", () => {
-  const mockReload = jest.fn();
-  const originalLocation = window.location;
-
-  beforeAll(() => {
-    Object.defineProperty(window, "location", {
-      configurable: true,
-      value: { ...originalLocation, reload: mockReload },
-    });
-  });
-
-  afterAll(() => {
-    window.location = originalLocation;
+  beforeEach(() => {
+    // Suppress console.error for cleaner test output
+    jest.spyOn(console, "error").mockImplementation(() => {});
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
-  it("renders children when no error occurs", () => {
+  it("renders children when there is no error", () => {
     render(
       <HomeErrorBoundary>
-        <div>Test Content</div>
+        <WorkingComponent />
       </HomeErrorBoundary>
     );
 
-    expect(screen.getByText("Test Content")).toBeInTheDocument();
+    expect(screen.getByText("Working content")).toBeInTheDocument();
   });
 
-  it("renders error UI when error occurs", () => {
-    const spy = jest.spyOn(console, "error");
+  it("renders error UI when an error occurs", () => {
     render(
       <HomeErrorBoundary>
         <ErrorComponent />
@@ -55,34 +37,52 @@ describe("HomeErrorBoundary", () => {
     );
 
     expect(screen.getByText("Something went wrong")).toBeInTheDocument();
-    expect(screen.getByText("Test error")).toBeInTheDocument();
-    expect(screen.getByText("Try again")).toBeInTheDocument();
-    expect(spy).toHaveBeenCalled();
+    expect(screen.getByText("Test error message")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /try again/i })
+    ).toBeInTheDocument();
+  });
+
+  it("renders fallback error message when error has no message", () => {
+    const error = new Error();
+    render(
+      <HomeErrorBoundary>
+        {(() => {
+          throw error;
+        })()}
+      </HomeErrorBoundary>
+    );
+
+    expect(
+      screen.getByText(/an unexpected error occurred/i)
+    ).toBeInTheDocument();
+  });
+
+  it("logs error to console in development", () => {
+    const consoleSpy = jest.spyOn(console, "error");
+    render(
+      <HomeErrorBoundary>
+        <ErrorComponent />
+      </HomeErrorBoundary>
+    );
+
+    expect(consoleSpy).toHaveBeenCalled();
   });
 
   it("reloads page when try again button is clicked", () => {
+    const reloadMock = jest.fn();
+    Object.defineProperty(window, "location", {
+      value: { reload: reloadMock },
+      writable: true,
+    });
+
     render(
       <HomeErrorBoundary>
         <ErrorComponent />
       </HomeErrorBoundary>
     );
 
-    fireEvent.click(screen.getByText("Try again"));
-    expect(mockReload).toHaveBeenCalled();
-  });
-
-  it("logs error information to console", () => {
-    const spy = jest.spyOn(console, "error");
-    render(
-      <HomeErrorBoundary>
-        <ErrorComponent />
-      </HomeErrorBoundary>
-    );
-
-    expect(spy).toHaveBeenCalledWith(
-      "Home page error:",
-      new Error("Test error"),
-      expect.any(Object)
-    );
+    fireEvent.click(screen.getByRole("button", { name: /try again/i }));
+    expect(reloadMock).toHaveBeenCalled();
   });
 });

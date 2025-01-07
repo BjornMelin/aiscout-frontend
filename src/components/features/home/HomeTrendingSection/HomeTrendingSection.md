@@ -1,53 +1,85 @@
 # HomeTrendingSection Component
 
-The HomeTrendingSection component displays a preview of trending topics in AI/ML on the home page, with a link to view the full trending page.
+A component that displays trending topics and content in a card-based layout for the AI/ML content discovery platform.
 
 ## Features
 
-- Displays top 3 trending topics
+- Displays top 5 trending topics
+- Displays top 5 trending content items
+- Trend indicators with color-coded arrows
 - Loading state with skeleton UI
-- Error handling with retry functionality
-- "View all" navigation to full trending page
-- Automatic data fetching
+- Responsive design
+
+## Props
+
+| Prop      | Type      | Required | Default | Description                                    |
+| --------- | --------- | -------- | ------- | ---------------------------------------------- |
+| isLoading | `boolean` | No       | `false` | Whether the component is in a loading state    |
 
 ## Usage
 
 ```tsx
 import { HomeTrendingSection } from "@/components/features/home/HomeTrendingSection/HomeTrendingSection";
 
-export default function HomePage() {
-  return (
-    <div className="container">
-      <HomeTrendingSection />
-    </div>
-  );
-}
+// Basic usage
+<HomeTrendingSection />
+
+// With loading state
+<HomeTrendingSection isLoading={true} />
 ```
 
-## Technical Details
+## Loading State
 
-- Uses Zustand for state management
-- Integrates with trending topics API
-- Implements loading and error states
-- Uses shadcn/ui Card component
-- Responsive design with Tailwind CSS
+When `isLoading` is true, the component displays a skeleton UI that includes:
+- Placeholder for section title
+- Two cards with:
+  - Placeholder for card headers
+  - Placeholder for "View all" links
+  - 5 placeholder items in each card
+  - Placeholder for trend indicators and scores
 
-## States
+The skeleton UI maintains the same layout and spacing as the loaded content, providing a smooth transition when data becomes available.
 
-1. **Loading**: Shows skeleton UI while trending data is being fetched
-2. **Error**: Displays error message with retry option
-3. **Success**: Shows top 3 trending topics with "View all" button
+## Trending Topics
 
-## Accessibility
+- Displays top 5 trending topics
+- Each topic shows:
+  - Topic title
+  - Trend score in a badge
+  - Trend direction indicator (up/down/stable)
+- Links to topic-specific search page
+- "View all" link to trending page
 
-- Proper heading hierarchy
-- Loading states announced to screen readers
-- Error messages properly conveyed
-- Interactive elements are keyboard accessible
+## Trending Content
 
-## Dependencies
+- Displays top 5 trending content items
+- Each item shows:
+  - Content title
+  - Content type badge
+  - Trend score in a badge
+  - Trend direction indicator (up/down/stable)
+- Links to individual content pages
+- "View all" link to trending page
 
-- @/lib/store/trending
-- @/components/ui/card
-- @/components/ui/button
-- @/components/features/trending/TrendingTopicCard
+## Trend Indicators
+
+Color-coded arrows indicate trend direction:
+- Green up arrow: Significant increase (>10)
+- Red down arrow: Significant decrease (<-10)
+- Yellow sideways arrow: Stable (-10 to 10)
+
+## Styling
+
+- Uses Tailwind CSS for styling
+- Card-based layout with hover effects
+- Consistent with the application's design system
+- Uses shadcn/ui components for UI elements
+
+## Testing
+
+The component includes comprehensive tests that cover:
+- Rendering of all main elements
+- Loading state display
+- Correct number of trending items
+- Trend indicator display
+- Link functionality 

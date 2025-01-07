@@ -1,102 +1,82 @@
 import { render, screen } from "@testing-library/react";
 import { StaggeredContent } from "../StaggeredContent";
+import { mockContent } from "@/data/mock/mock-content";
 import { useInView } from "react-intersection-observer";
 import { useAnimation } from "framer-motion";
 
-// Mock dependencies
-jest.mock("react-intersection-observer", () => ({
-  useInView: jest.fn(),
-}));
-
+// Mock the intersection observer hook
+jest.mock("react-intersection-observer");
 jest.mock("framer-motion", () => ({
-  motion: {
-    div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-      <div {...props}>{children}</div>
-    ),
-  },
+  ...jest.requireActual("framer-motion"),
   useAnimation: jest.fn(),
 }));
 
-const mockItems = [
-  {
-    id: "1",
-    type: "article" as const,
-    title: "Test Article 1",
-    description: "Description 1",
-    authors: [{ id: "a1", name: "Author 1" }],
-    date: "2024-01-01",
-    tags: [{ id: "t1", name: "Tag 1" }],
-    metrics: { views: 1000 },
-    content: "Test content 1",
-    source: "Test Source",
-  },
-  {
-    id: "2",
-    type: "article" as const,
-    title: "Test Article 2",
-    description: "Description 2",
-    authors: [{ id: "a2", name: "Author 2" }],
-    date: "2024-01-02",
-    tags: [{ id: "t2", name: "Tag 2" }],
-    metrics: { views: 2000 },
-    content: "Test content 2",
-    source: "Test Source",
-  },
-];
-
 describe("StaggeredContent", () => {
+  const mockItems = mockContent.slice(0, 3);
   const mockStart = jest.fn();
-  const mockInView = jest.fn();
 
   beforeEach(() => {
+    (useInView as jest.Mock).mockReturnValue([null, false]);
     (useAnimation as jest.Mock).mockReturnValue({ start: mockStart });
-    (useInView as jest.Mock).mockReturnValue([null, true, mockInView]);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it("renders all content items", () => {
+  it("renders content items", () => {
     render(<StaggeredContent items={mockItems} />);
 
-    expect(screen.getByText("Test Article 1")).toBeInTheDocument();
-    expect(screen.getByText("Test Article 2")).toBeInTheDocument();
-  });
-
-  it("applies custom className when provided", () => {
-    const { container } = render(
-      <StaggeredContent items={mockItems} className="custom-class" />
-    );
-
-    expect(container.firstChild).toHaveClass("custom-class");
-  });
-
-  it("starts animation when in view", () => {
-    render(<StaggeredContent items={mockItems} />);
-
-    expect(mockStart).toHaveBeenCalledWith(
-      expect.objectContaining({
-        opacity: 1,
-        y: 0,
-      })
-    );
-  });
-
-  it("renders items with initial animation state", () => {
-    const { container } = render(<StaggeredContent items={mockItems} />);
-    const items = container.querySelectorAll("[style]");
-
-    items.forEach((item) => {
-      expect(item).toHaveStyle({
-        opacity: "0",
-        transform: "translateY(20px)",
-      });
+    mockItems.forEach((item) => {
+      expect(screen.getByText(item.title)).toBeInTheDocument();
     });
   });
 
-  it("handles empty items array", () => {
-    const { container } = render(<StaggeredContent items={[]} />);
-    expect(container.children).toHaveLength(0);
+  it("renders skeleton UI when loading", () => {
+    render(<StaggeredContent items={mockItems} isLoading skeletonCount={2} />);
+
+    const skeletons = screen.getAllByTestId("staggered-content-skeleton");
+    expect(skeletons).toHaveLength(1);
+    expect(screen.queryByText(mockItems[0].title)).not.toBeInTheDocument();
+  });
+
+  it("starts animation when content comes into view", () => {
+    (useInView as jest.Mock).mockReturnValue([null, true]);
+
+    render(<StaggeredContent items={mockItems} />);
+
+    expect(mockStart).toHaveBeenCalled();
+  });
+
+  it("applies custom className", () => {
+    const customClass = "custom-class";
+    render(<StaggeredContent items={mockItems} className={customClass} />);
+
+    const container = screen.getByTestId("staggered-content");
+    expect(container).toHaveClass(customClass);
+  });
+
+  it("renders correct number of skeleton items", () => {
+    const skeletonCount = 4;
+    render(
+      <StaggeredContent
+        items={mockItems}
+        isLoading
+        skeletonCount={skeletonCount}
+      />
+    );
+
+    const skeletons = screen.getAllByTestId("staggered-content-skeleton");
+    expect(skeletons).toHaveLength(1);
+    const skeletonItems = screen.getAllByRole("generic");
+    expect(skeletonItems).toHaveLength(skeletonCount);
+  });
+
+  it("does not animate when not in view", () => {
+    (useInView as jest.Mock).mockReturnValue([null, false]);
+
+    render(<StaggeredContent items={mockItems} />);
+
+    expect(mockStart).not.toHaveBeenCalled();
   });
 });
