@@ -50,14 +50,11 @@ function calculateTrendingMetrics(content: ContentItem): TrendingMetrics {
 
 export function getTrendingContent(limit?: number): TrendingContent[] {
   const trendingContent = mockContent
-    .map((content) => {
-      const metrics = calculateTrendingMetrics(content);
-      return {
-        ...content,
-        ...metrics,
-      } as TrendingContent;
-    })
-    .sort((a, b) => b.trendingScore - a.trendingScore);
+    .map((content) => ({
+      ...content,
+      trendMetrics: calculateTrendingMetrics(content),
+    }))
+    .sort((a, b) => b.trendMetrics.score - a.trendMetrics.score);
 
   return limit ? trendingContent.slice(0, limit) : trendingContent;
 }
@@ -81,7 +78,7 @@ export function getTrendingTopics(
 
   contents.forEach((content) => {
     content.tags.forEach((tag) => {
-      const existing = topicScores.get(tag);
+      const existing = topicScores.get(tag.name);
       if (existing) {
         existing.score += content.metrics.views;
         existing.content.push(content);
@@ -93,7 +90,7 @@ export function getTrendingTopics(
             : "discussions"
         ] += 1;
       } else {
-        topicScores.set(tag, {
+        topicScores.set(tag.name, {
           score: content.metrics.views,
           content: [content],
           relatedCount: {
@@ -109,52 +106,98 @@ export function getTrendingTopics(
     });
   });
 
+  const generateTrendData = () => {
+    const now = new Date();
+    const points = [];
+    for (let i = 0; i < 7; i++) {
+      points.push({
+        timestamp: new Date(
+          now.getTime() - i * 24 * 60 * 60 * 1000
+        ).toISOString(),
+        value: Math.floor(Math.random() * 50) + 50,
+      });
+    }
+    return points;
+  };
+
   const trendingTopics = Array.from(topicScores.entries())
     .map(
       ([tag, data]): TrendingTopic => ({
         id: tag,
         title: tag,
         description: `Trending content about ${tag}`,
-        trendingScore: Math.round(data.score / data.content.length),
-        changePercent: Math.floor(Math.random() * 40) - 20,
-        timeframe: "day",
         tags: Array.from(new Set(data.content.flatMap((c) => c.tags))).filter(
-          (t) => t !== tag
+          (t) => t.name !== tag
         ),
-        relatedContent: data.relatedCount,
+        sources: {
+          papers: data.relatedCount.papers,
+          repos: data.relatedCount.repositories,
+          articles: 0,
+          discussions: data.relatedCount.discussions,
+        },
+        relatedContent: {
+          papers: data.relatedCount.papers,
+          repositories: data.relatedCount.repositories,
+          articles: 0,
+          discussions: data.relatedCount.discussions,
+        },
+        trendData: generateTrendData(),
+        topicMetrics: {
+          totalMentions: data.content.length,
+          paperCitations: data.content.reduce(
+            (acc, c) => acc + (c.metrics.citations || 0),
+            0
+          ),
+          repoStars: data.content.reduce(
+            (acc, c) => acc + (c.metrics.stars || 0),
+            0
+          ),
+          discussionEngagement: data.content.reduce(
+            (acc, c) => acc + (c.metrics.comments || 0),
+            0
+          ),
+        },
+        trendMetrics: {
+          score: Math.round(data.score / data.content.length),
+          change: Math.floor(Math.random() * 40) - 20,
+          timeframe: "day",
+          count: data.content.length,
+        },
       })
     )
-    .sort((a, b) => b.trendingScore - a.trendingScore);
+    .sort((a, b) => b.trendMetrics.score - a.trendMetrics.score);
 
   return limit ? trendingTopics.slice(0, limit) : trendingTopics;
 }
 
 export const searchContent = (
-  contents: Content[],
+  contents: ContentItem[],
   query: string
-): Content[] => {
+): ContentItem[] => {
   const lowercaseQuery = query.toLowerCase();
   return contents.filter(
     (item) =>
       item.title.toLowerCase().includes(lowercaseQuery) ||
-      item.description.toLowerCase().includes(lowercaseQuery) ||
-      item.tags.some((tag) => tag.toLowerCase().includes(lowercaseQuery))
+      item.description?.toLowerCase().includes(lowercaseQuery) ||
+      item.tags.some((tag) => tag.name.toLowerCase().includes(lowercaseQuery))
   );
 };
 
 export const getRelatedContent = (
-  contents: Content[],
+  contents: ContentItem[],
   contentId: string
-): Content[] => {
+): ContentItem[] => {
   const content = getContentById(contents, contentId);
   if (!content?.relatedContent) return [];
 
   return content.relatedContent
     .map((related) => getContentById(contents, related.id))
-    .filter((item): item is Content => !!item);
+    .filter((item): item is ContentItem => !!item);
 };
 
-export const getContentSections = (contents: Content[]): ContentSection[] => {
+export const getContentSections = (
+  contents: ContentItem[]
+): ContentSection[] => {
   return [
     {
       id: "trending",
