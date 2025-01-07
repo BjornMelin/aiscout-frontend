@@ -17,12 +17,12 @@ interface TrendingTopicCardProps {
 
 export function TrendingTopicCard({ topic }: TrendingTopicCardProps) {
   const router = useRouter();
-  const isPositive = topic.change >= 0;
-  const changeAbs = Math.abs(topic.change);
+  const isPositive = topic.trendMetrics.change >= 0;
+  const changeAbs = Math.abs(topic.trendMetrics.change);
 
   const handleClick = () => {
     const params = new URLSearchParams({
-      q: topic.name,
+      q: topic.title,
       sort: "recent",
     });
     router.push(`/search?${params.toString()}`);
@@ -37,7 +37,7 @@ export function TrendingTopicCard({ topic }: TrendingTopicCardProps) {
         <HoverCard>
           <HoverCardTrigger asChild>
             <h3 className="text-lg font-semibold hover:underline">
-              {topic.name}
+              {topic.title}
             </h3>
           </HoverCardTrigger>
           <HoverCardContent className="w-80">
@@ -49,7 +49,7 @@ export function TrendingTopicCard({ topic }: TrendingTopicCardProps) {
               <div className="pt-2">
                 <h5 className="text-sm font-medium mb-1">Related Topics</h5>
                 <div className="flex flex-wrap gap-1">
-                  {topic.relatedTopics.map((related) => (
+                  {Object.keys(topic.relatedContent).map((related) => (
                     <span
                       key={related}
                       className="text-xs px-2 py-1 rounded-full bg-secondary"
@@ -77,10 +77,10 @@ export function TrendingTopicCard({ topic }: TrendingTopicCardProps) {
 
       <div className="mt-2">
         <div className="flex justify-between text-sm text-muted-foreground mb-1">
-          <span>Score: {topic.score}</span>
-          <span>{topic.count} mentions</span>
+          <span>Score: {topic.trendMetrics.score}</span>
+          <span>{topic.topicMetrics.totalMentions} mentions</span>
         </div>
-        <Progress value={topic.score} max={100} className="h-1" />
+        <Progress value={topic.trendMetrics.score} max={100} className="h-1" />
       </div>
 
       <div className="mt-3 flex justify-between text-xs text-muted-foreground">
