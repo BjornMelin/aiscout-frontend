@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { ContentCard } from "@/components/features/content/ContentCard/ContentCard";
+import { ContentDetail } from "@/components/features/content/ContentDetail/ContentDetail";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { ContentItem } from "@/lib/types/content";
 
@@ -65,7 +65,7 @@ export function StaggeredContent({
           animate={controls}
           className="mb-4"
         >
-          <ContentCard content={item} />
+          <ContentDetail {...item} />
         </motion.div>
       ))}
     </div>

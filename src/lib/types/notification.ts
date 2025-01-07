@@ -8,7 +8,7 @@ export type NotificationType =
   | "collaboration_invite"
   | "system";
 
-export interface NotificationData {
+export interface Notification {
   id: string;
   type: NotificationType;
   title: string;
@@ -16,7 +16,7 @@ export interface NotificationData {
   createdAt: Date;
   link?: string;
   isRead: boolean;
-  sender: {
+  sender?: {
     id: string;
     name: string;
     avatar?: string;
@@ -30,7 +30,7 @@ export interface NotificationData {
 }
 
 export interface NotificationStore {
-  notifications: NotificationData[];
+  notifications: Notification[];
   unreadCount: number;
   isLoading: boolean;
   error: Error | null;
