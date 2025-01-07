@@ -1,3 +1,6 @@
+import { BookmarkedItem } from "@/lib/types/bookmarks";
+import { ShareSettings } from "@/lib/types/sharing";
+
 export interface Folder {
   id: string;
   name: string;
@@ -8,30 +11,4 @@ export interface Folder {
   items: BookmarkedItem[];
   isShared: boolean;
   shareSettings?: ShareSettings;
-}
-
-export interface BookmarkedItem {
-  id: string;
-  contentId: string;
-  contentType: "paper" | "repo" | "article" | "discussion";
-  title: string;
-  addedAt: Date;
-  folderId?: string;
-  note?: string;
-}
-
-export interface ShareSettings {
-  id: string;
-  folderId: string;
-  isPublic: boolean;
-  allowEdits: boolean;
-  sharedWith: SharedUser[];
-  shareToken?: string;
-}
-
-export interface SharedUser {
-  id: string;
-  email: string;
-  permissions: "view" | "edit";
-  addedAt: Date;
 }

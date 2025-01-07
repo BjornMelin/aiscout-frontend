@@ -1,25 +1,24 @@
-export type ContentType = "paper" | "repo" | "article" | "discussion";
+import { Author, Source, Metrics, Tag, ContentType } from "./shared";
 
-export interface Author {
+export interface Reference {
   id: string;
-  name: string;
-  avatar?: string;
-  affiliation?: string;
-  bio?: string;
+  title: string;
+  authors: string[];
+  year: string;
+  url?: string;
 }
 
-export interface Tag {
+export interface RelatedContent {
   id: string;
-  name: string;
-  category?: string;
+  type: ContentType;
+  title: string;
+  authors: string[];
+  description?: string;
 }
 
-export interface Metrics {
-  views: number;
-  citations?: number;
-  stars?: number;
-  forks?: number;
-  comments?: number;
+export interface ProgrammingLanguage {
+  name: string;
+  percentage: number;
 }
 
 export interface BaseContent {
@@ -28,34 +27,44 @@ export interface BaseContent {
   title: string;
   description: string;
   authors: Author[];
+  sources: Source[];
   date: string;
-  tags: Tag[];
   metrics: Metrics;
-  url?: string;
+  tags: Tag[];
+  isBookmarked: boolean;
+  featured: boolean;
 }
 
-export interface ResearchPaper extends BaseContent {
+export interface CuratedSection {
+  id: string;
+  title: string;
+  description: string;
+  items: BaseContent[];
+}
+
+export interface Paper extends BaseContent {
   type: "paper";
   abstract: string;
-  doi?: string;
+  // doi?: string;
+  content: string;
   journal?: string;
   pdfUrl?: string;
-  citations: number;
+  references: Reference[];
+  relatedContent: RelatedContent[];
 }
 
 export interface Repository extends BaseContent {
-  type: "repo";
-  language: string;
-  stars: number;
-  forks: number;
-  lastCommit: string;
-  readme?: string;
+  type: "repository";
+  readmeContent?: string;
+  repositoryUrl: string;
+  programmingLanguages: ProgrammingLanguage[];
+  relatedContent: RelatedContent[];
 }
 
 export interface Article extends BaseContent {
   type: "article";
   content: string;
-  source: string;
+  relatedContent: RelatedContent[];
   readTime?: number;
 }
 
@@ -63,10 +72,12 @@ export interface Discussion extends BaseContent {
   type: "discussion";
   platform: string;
   threadUrl: string;
-  participants: number;
+  participants: Author[];
+  participantsCount: number;
   lastActivity: string;
+  relatedContent: RelatedContent[];
 }
 
-export type ContentItem = ResearchPaper | Repository | Article | Discussion;
+export type ContentItem = Paper | Repository | Article | Discussion;
 
 export type ContentMap = Record<string, ContentItem>;
