@@ -56,8 +56,8 @@ function CuratedContentCard({ item }: { item: ContentItem }) {
               {item.authors?.map((author, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <Avatar className="w-4 h-4">
-                    <AvatarImage src={author.avatar} />
-                    <AvatarFallback>{author.name[0]}</AvatarFallback>
+                    <AvatarImage src={author.avatar || ''} alt={author.name} />
+                    <AvatarFallback>{author.name?.[0]}</AvatarFallback>
                   </Avatar>
                   <span className="text-xs">{author.name}</span>
                 </div>
