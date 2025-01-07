@@ -1,17 +1,21 @@
-"use client";
-
-import { useEffect } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme/theme-provider";
-import { Toaster } from "sonner";
 import Header from "@/components/common/layout/Header/Header";
 import Footer from "@/components/common/layout/Footer/Footer";
 import { cn } from "@/lib/utils";
-import { setupNotificationWebSocket } from "@/lib/utils/notifications";
 import { Suspense } from "react";
+import { Providers } from "@/components/providers/Providers";
+import { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "AIScout",
+  description: "Discover and explore AI/ML content",
+  icons: {
+    icon: '/favicon.ico',
+  },
+}; 
 
 function LoadingSkeleton() {
   return (
@@ -37,11 +41,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  useEffect(() => {
-    const ws = setupNotificationWebSocket();
-    return () => ws?.close();
-  }, []);
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -50,12 +49,7 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans antialiased"
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <Providers>
           <div className="relative min-h-screen flex flex-col">
             <Header />
             <Suspense fallback={<LoadingSkeleton />}>
@@ -63,8 +57,7 @@ export default function RootLayout({
             </Suspense>
             <Footer />
           </div>
-          <Toaster position="top-right" expand={true} richColors />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
