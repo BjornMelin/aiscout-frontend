@@ -3,19 +3,19 @@ import { AuthUser } from "@/lib/types/userAuth";
 export const mockUsers: AuthUser[] = [
   {
     id: "1",
-    name: "Sarah Chen",
-    email: "sarah.chen@research.ai",
-    avatarSeed: "Sarah",
-    role: "AI Research Scientist",
-    affiliation: "Stanford AI Lab",
+    name: "Bjorn Melin",
+    email: "bjorn@research.ai",
+    avatarSeed: "Bjorn",
+    role: "Senior Data Scientist",
+    affiliation: "3M",
     bio: "Focusing on large language models and their applications in scientific research",
     createdAt: new Date("2023-01-15"),
     updatedAt: new Date("2023-01-15"),
     socialLinks: {
-      twitter: "sarahchen_ai",
-      github: "sarahchen",
-      linkedin: "sarahchen-ai",
-      website: "https://sarahchen.ai",
+      twitter: "bjorntestx",
+      github: "bjorntest-github.com",
+      linkedin: "bjorntest-linkedin.com",
+      website: "https://bjorntest.com",
     },
   },
   {

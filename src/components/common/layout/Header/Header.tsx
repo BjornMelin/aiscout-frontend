@@ -33,6 +33,7 @@ import { Separator } from "@/components/ui/separator";
 import { signOut } from "next-auth/react";
 import { mockUsers } from "@/data/mock/mock-user";
 import { mockNotifications } from "@/data/mock/mock-notifications";
+import { getUserDisplayImage } from "@/lib/types/userAuth";
 
 // Mock user data - TODO: replace with actual user data
 const mockUser = mockUsers[0];
@@ -176,7 +177,7 @@ export default function Header() {
                         <AvatarImage
                           // TODO: replace with actual user avatar
                           // src={getUserDisplayImage(session.user)}
-                          src={mockUser.avatarSeed}
+                          src={getUserDisplayImage(mockUser)}
                           alt={mockUser.name || "User"}
                           // alt={session.user.name || "User"}
                         />
@@ -207,7 +208,7 @@ export default function Header() {
                     <DropdownMenuGroup>
                       <DropdownMenuItem asChild>
                         <Link
-                          href={`/user/${mockUser.id}`}
+                          href={isLoggedIn ? `/user/${mockUser.id}` : '/sign-in'}
                           className="cursor-pointer"
                         >
                           <User className="mr-2 h-4 w-4" />

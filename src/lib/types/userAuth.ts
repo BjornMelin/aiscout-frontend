@@ -39,6 +39,7 @@ export interface UserProfile {
   id: string;
   name: string;
   email: string;
+  username: string;
   profileImage?: string; // URL to uploaded profile photo
   avatarSeed?: string; // Seed for generating avatar
   affiliation?: string;
