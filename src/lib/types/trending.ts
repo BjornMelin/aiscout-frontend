@@ -1,10 +1,34 @@
-export interface TrendingTopic {
-  id: string;
-  name: string;
+import { ContentItem } from "@/lib/types/content";
+
+// Trending timeframes
+export type TrendingTimeframe = "day" | "week" | "month";
+
+// Trending metrics
+export interface TrendingMetrics {
   score: number;
   change: number;
   count: number;
-  timeframe: "day" | "week" | "month";
+  timeframe: TrendingTimeframe;
+}
+
+// Topic metrics
+export interface TopicMetrics {
+  totalMentions: number;
+  paperCitations: number;
+  repoStars: number;
+  discussionEngagement: number;
+}
+
+// Trending point is a point in time with a value
+export interface TrendPoint {
+  timestamp: string;
+  value: number;
+}
+
+// Trending topic
+export interface TrendingTopic {
+  id: string;
+  name: string;
   sources: {
     papers: number;
     repos: number;
@@ -14,25 +38,34 @@ export interface TrendingTopic {
   relatedTopics: string[];
   description?: string;
   trendData: TrendPoint[];
+  topicMetrics: TopicMetrics;
+  trendMetrics: TrendingMetrics;
 }
 
-export interface TrendPoint {
-  timestamp: string;
-  value: number;
+// Trending content is a content item with trending metrics
+export type TrendingContent = ContentItem & {
+  trendingScore: number;
+  changePercent: number;
+  timeframe: TrendingTimeframe;
+};
+
+// Trending insight is an insight about a trending topic
+export interface TrendingInsight {
+  id: string;
+  topic: string;
+  insight: string;
+  source: string;
+  date: string;
+  url: string;
+  trendingScore?: number;
 }
 
-export interface TopicMetrics {
-  totalMentions: number;
-  paperCitations: number;
-  repoStars: number;
-  discussionEngagement: number;
-}
-
+// Trending store is a store for trending data
 export interface TrendingStore {
   topics: TrendingTopic[];
   isLoading: boolean;
   error: Error | null;
-  timeframe: "day" | "week" | "month";
-  setTimeframe: (timeframe: "day" | "week" | "month") => void;
+  timeframe: TrendingTimeframe;
+  setTimeframe: (timeframe: TrendingTimeframe) => void;
   fetch: () => Promise<void>;
 }
