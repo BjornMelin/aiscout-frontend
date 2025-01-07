@@ -61,26 +61,26 @@ export default function ContactPage() {
                 <div>
                   <h3 className="font-medium">Address</h3>
                   <p className="text-muted-foreground">
-                    123 AI Street
-                    <br />
-                    San Francisco, CA 94105
+                    {/* 123 AI Street
+                    <br /> */}
+                    Salt Lake City, UT
                     <br />
                     United States
                   </p>
                 </div>
               </div>
-              <div className="flex items-start space-x-4">
+              {/* <div className="flex items-start space-x-4">
                 <Phone className="h-5 w-5 mt-1 text-muted-foreground" />
                 <div>
                   <h3 className="font-medium">Phone</h3>
                   <p className="text-muted-foreground">+1 (555) 123-4567</p>
                 </div>
-              </div>
+              </div> */}
               <div className="flex items-start space-x-4">
                 <Mail className="h-5 w-5 mt-1 text-muted-foreground" />
                 <div>
                   <h3 className="font-medium">Email</h3>
-                  <p className="text-muted-foreground">contact@aiscout.com</p>
+                  <p className="text-muted-foreground">bjornmelin16@gmail.com</p>
                 </div>
               </div>
             </div>
@@ -88,8 +88,8 @@ export default function ContactPage() {
             <div className="space-y-4 mt-8">
               <h3 className="font-medium">Office Hours</h3>
               <div className="space-y-2 text-muted-foreground">
-                <p>Monday - Friday: 9:00 AM - 6:00 PM (PST)</p>
-                <p>Saturday - Sunday: Closed</p>
+                <p>Monday - Friday: 9:00 AM - 4:00 PM (MST)</p>
+                <p>Saturday - Sunday: As available</p>
               </div>
             </div>
           </section>
