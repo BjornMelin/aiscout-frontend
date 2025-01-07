@@ -5,13 +5,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SearchBar } from "@/components/features/search/SearchBar/SearchBar";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { NotificationIcon } from "@/components/features/notifications/NotificationIcon/NotificationIcon";
+import { useSession } from "next-auth/react";
+import { getUserDisplayImage } from "@/lib/types/userAuth";
 
 /**
  * Header component for the AIScout application.
  * Contains the main navigation, search bar, notifications, and user profile.
  */
 export default function Header() {
-  const isLoggedIn = false;
+  const { data: session } = useSession();
+  const isLoggedIn = !!session?.user;
 
   const handleSearch = (query: string) => {
     console.log("Search query:", query);
@@ -53,10 +56,13 @@ export default function Header() {
           <ThemeToggle />
           <NotificationIcon />
 
-          {isLoggedIn ? (
+          {isLoggedIn && session.user ? (
             <Avatar>
-              <AvatarImage src="" alt="User" />
-              <AvatarFallback>U</AvatarFallback>
+              <AvatarImage
+                src={getUserDisplayImage(session.user)}
+                alt={session.user.name || "User"}
+              />
+              <AvatarFallback>{session.user.name?.[0] || "U"}</AvatarFallback>
             </Avatar>
           ) : (
             <div className="flex items-center space-x-4">
