@@ -7,8 +7,8 @@ export type TrendingTimeframe = "day" | "week" | "month";
 export interface TrendingMetrics {
   score: number;
   change: number;
-  count: number;
   timeframe: TrendingTimeframe;
+  count?: number;
 }
 
 // Topic metrics
@@ -43,11 +43,7 @@ export interface TrendingTopic {
 }
 
 // Trending content is a content item with trending metrics
-export type TrendingContent = ContentItem & {
-  trendingScore: number;
-  changePercent: number;
-  timeframe: TrendingTimeframe;
-};
+export type TrendingContent = ContentItem & TrendingMetrics;
 
 // Trending insight is an insight about a trending topic
 export interface TrendingInsight {

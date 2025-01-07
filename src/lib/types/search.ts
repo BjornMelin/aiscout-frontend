@@ -1,8 +1,16 @@
-export type ContentType = "paper" | "repo" | "article" | "discussion";
+import { Author, Metrics } from "@/lib/types/shared";
+
+export type SearchType =
+  | "term"
+  | "author"
+  | "paper"
+  | "repository"
+  | "article"
+  | "discussion";
 
 export interface SearchParams {
   q: string;
-  type?: ContentType[];
+  type?: SearchType[];
   dateRange?: string;
   from?: string;
   to?: string;
@@ -13,19 +21,15 @@ export interface SearchParams {
 
 export interface SearchResult {
   id: string;
-  type: ContentType;
+  type: SearchType;
   title: string;
   description: string;
-  authors?: string[];
+  authors?: Author[];
   date: string;
   tags?: string[];
   source?: string;
   sourceUrl?: string;
-  metrics?: {
-    citations?: number;
-    stars?: number;
-    comments?: number;
-  };
+  metrics?: Metrics;
 }
 
 export interface SearchResponse {
@@ -34,4 +38,10 @@ export interface SearchResponse {
   page: number;
   limit: number;
   hasMore: boolean;
+}
+
+export interface SearchSuggestion {
+  id: string;
+  type: SearchType;
+  text: string;
 }
