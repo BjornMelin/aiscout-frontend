@@ -76,7 +76,6 @@ Recurrent neural networks, long short-term memory and gated recurrent neural net
       },
     ],
     featured: true,
-    trendingScore: 98,
   } as Paper,
   {
     id: "2",
@@ -123,7 +122,6 @@ TensorFlow is an end-to-end open source platform for machine learning. It has a 
       },
     ],
     featured: true,
-    trendingScore: 95,
   } as Repository,
   {
     id: "3",
@@ -164,7 +162,6 @@ As language models continue to evolve, we're seeing unprecedented capabilities i
       },
     ],
     featured: true,
-    trendingScore: 92,
   } as Article,
   {
     id: "4",
@@ -221,7 +218,6 @@ Join us in discussing the ethical considerations and responsibilities in AI deve
       },
     ],
     featured: false,
-    trendingScore: 88,
   } as Discussion,
   {
     id: "5",
@@ -266,7 +262,6 @@ We introduce BERT, a deep bidirectional transformer model that revolutionizes NL
       },
     ],
     featured: true,
-    trendingScore: 90,
   } as Paper,
   {
     id: "6",
@@ -308,7 +303,6 @@ We introduce BERT, a deep bidirectional transformer model that revolutionizes NL
       },
     ],
     featured: true,
-    trendingScore: 94,
   } as Repository,
   {
     id: "7",
@@ -353,7 +347,6 @@ Diffusion models have emerged as a powerful new approach to generating high-qual
       },
     ],
     featured: true,
-    trendingScore: 91,
   } as Article,
   {
     id: "8",
@@ -415,7 +408,6 @@ Let's discuss how recent advances in RL are transforming robotics...`,
       },
     ],
     featured: false,
-    trendingScore: 87,
   } as Discussion,
   {
     id: "9",
@@ -470,7 +462,6 @@ We explore how large language models can perform complex reasoning tasks without
       },
     ],
     featured: true,
-    trendingScore: 93,
   } as Paper,
   {
     id: "10",
@@ -516,6 +507,5 @@ OpenAI Gym is a toolkit for developing and comparing reinforcement learning algo
       },
     ],
     featured: false,
-    trendingScore: 86,
   } as Repository,
 ];

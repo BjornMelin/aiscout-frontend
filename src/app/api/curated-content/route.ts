@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { mockCuratedContent } from "@/data/mock/curated-content";
-import type { ContentType, ContentItem } from "@/lib/types/content";
+import { mockContent } from "@/data/mock/mock-content";
+import type { ContentItem } from "@/lib/types/content";
+import type { ContentType } from "@/lib/types/shared";
 import type { CuratedContent } from "@/lib/types/home";
 
 export async function GET(request: Request) {
@@ -11,17 +12,31 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get("type") as ContentType | null;
     const limit = Number(searchParams.get("limit")) || 6;
-    const sort = searchParams.get("sort") as "popular" | "recent" | "trending" | null;
-    const timeframe = searchParams.get("timeframe") as "day" | "week" | "month" | null;
+    const sort = searchParams.get("sort") as
+      | "popular"
+      | "recent"
+      | "trending"
+      | null;
+    const timeframe = searchParams.get("timeframe") as
+      | "day"
+      | "week"
+      | "month"
+      | null;
 
     // Validate type if provided
-    if (type && !["paper", "repository", "article", "discussion"].includes(type)) {
-      return NextResponse.json({ error: "Invalid content type" }, { status: 400 });
+    if (
+      type &&
+      !["paper", "repository", "article", "discussion"].includes(type)
+    ) {
+      return NextResponse.json(
+        { error: "Invalid content type" },
+        { status: 400 }
+      );
     }
 
     // Return filtered and sorted content
     if (type) {
-      const contentSection = mockCuratedContent[`${type}s` as keyof CuratedContent];
+      const contentSection = mockContent.filter((item) => item.type === type);
       const sortedContent = sort
         ? sortContent(contentSection, sort, timeframe)
         : contentSection;
@@ -30,14 +45,22 @@ export async function GET(request: Request) {
     }
 
     // Return all content with limits applied
-    const limitedContent: CuratedContent = {
-      papers: mockCuratedContent.papers.slice(0, limit),
-      repositories: mockCuratedContent.repositories.slice(0, limit),
-      articles: mockCuratedContent.articles.slice(0, limit),
-      discussions: mockCuratedContent.discussions.slice(0, limit),
+    const curatedContent: CuratedContent = {
+      papers: mockContent
+        .filter((item) => item.type === "paper")
+        .slice(0, limit),
+      repositories: mockContent
+        .filter((item) => item.type === "repository")
+        .slice(0, limit),
+      articles: mockContent
+        .filter((item) => item.type === "article")
+        .slice(0, limit),
+      discussions: mockContent
+        .filter((item) => item.type === "discussion")
+        .slice(0, limit),
     };
 
-    return NextResponse.json(limitedContent);
+    return NextResponse.json(curatedContent);
   } catch (error) {
     console.error("Error in curated content API:", error);
     return NextResponse.json(

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 // import type { NotificationData } from "@/lib/types/notification";
-import { mockNotifications } from "@/data/mock/notifications";
+import { mockNotifications } from "@/data/mock/mock-notifications";
 
 // GET /api/notifications
 export async function GET() {
