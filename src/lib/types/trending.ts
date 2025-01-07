@@ -1,4 +1,5 @@
 import { ContentItem } from "@/lib/types/content";
+import { Tag } from "@/lib/types/shared";
 
 // Trending timeframes
 export type TrendingTimeframe = "day" | "week" | "month";
@@ -28,22 +29,30 @@ export interface TrendPoint {
 // Trending topic
 export interface TrendingTopic {
   id: string;
-  name: string;
+  title: string;
+  description?: string;
+  tags: Tag[];
   sources: {
     papers: number;
     repos: number;
     articles: number;
     discussions: number;
   };
-  relatedTopics: string[];
-  description?: string;
+  relatedContent: {
+    papers: number;
+    repositories: number;
+    articles: number;
+    discussions: number;
+  };
   trendData: TrendPoint[];
   topicMetrics: TopicMetrics;
   trendMetrics: TrendingMetrics;
 }
 
 // Trending content is a content item with trending metrics
-export type TrendingContent = ContentItem & TrendingMetrics;
+export type TrendingContent = ContentItem & {
+  trendMetrics: TrendingMetrics;
+};
 
 // Trending insight is an insight about a trending topic
 export interface TrendingInsight {

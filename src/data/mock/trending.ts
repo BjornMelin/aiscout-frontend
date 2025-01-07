@@ -1,7 +1,7 @@
-import { TrendingTopic } from "../../lib/types/trending";
+import { TrendingTopic, TrendingTimeframe } from "@/lib/types/trending";
 import { subDays, subWeeks, subMonths } from "date-fns";
 
-function generateTrendData(timeframe: "day" | "week" | "month") {
+function generateTrendData(timeframe: TrendingTimeframe) {
   const points = [];
   const now = new Date();
   let startDate;
@@ -34,96 +34,107 @@ function generateTrendData(timeframe: "day" | "week" | "month") {
 export const mockTrendingTopics: TrendingTopic[] = [
   {
     id: "topic-1",
-    name: "Large Language Models",
-    score: 85,
-    change: 12,
-    count: 1250,
-    timeframe: "week",
+    title: "Large Language Models",
+    description: "Advanced AI models capable of understanding and generating human-like text",
+    tags: [
+      { id: "tag-1", name: "Transformers" },
+      { id: "tag-2", name: "GPT-4" },
+      { id: "tag-3", name: "NLP" },
+    ],
     sources: {
       papers: 145,
       repos: 230,
       articles: 450,
       discussions: 425,
     },
-    relatedTopics: ["Transformers", "GPT-4", "NLP", "Prompt Engineering"],
-    description:
-      "Advanced AI models capable of understanding and generating human-like text, with recent breakthroughs in reasoning and task automation.",
+    relatedContent: {
+      papers: 145,
+      repositories: 230,
+      articles: 450,
+      discussions: 425,
+    },
     trendData: generateTrendData("week"),
+    topicMetrics: {
+      totalMentions: 1250,
+      paperCitations: 7500,
+      repoStars: 15000,
+      discussionEngagement: 4500,
+    },
+    trendMetrics: {
+      score: 85,
+      change: 12,
+      timeframe: "week",
+      count: 1250,
+    },
   },
   {
     id: "topic-2",
-    name: "AI Agents",
-    score: 78,
-    change: 25,
-    count: 980,
-    timeframe: "week",
+    title: "AI Agents",
+    description: "AI systems that can autonomously perform tasks and make decisions",
+    tags: [
+      { id: "tag-4", name: "Autonomous Systems" },
+      { id: "tag-5", name: "Multi-Agent Learning" },
+      { id: "tag-6", name: "Robotics" },
+    ],
     sources: {
       papers: 95,
       repos: 185,
       articles: 320,
       discussions: 380,
     },
-    relatedTopics: ["Autonomous Systems", "Multi-Agent Learning", "Robotics"],
-    description:
-      "AI systems that can autonomously perform tasks, make decisions, and interact with their environment.",
+    relatedContent: {
+      papers: 95,
+      repositories: 185,
+      articles: 320,
+      discussions: 380,
+    },
     trendData: generateTrendData("week"),
+    topicMetrics: {
+      totalMentions: 980,
+      paperCitations: 4200,
+      repoStars: 12000,
+      discussionEngagement: 3800,
+    },
+    trendMetrics: {
+      score: 78,
+      change: 25,
+      timeframe: "week",
+      count: 980,
+    },
   },
   {
     id: "topic-3",
-    name: "Computer Vision",
-    score: 72,
-    change: -5,
-    count: 850,
-    timeframe: "week",
+    title: "Computer Vision",
+    description: "Systems that can process and understand visual information",
+    tags: [
+      { id: "tag-7", name: "Object Detection" },
+      { id: "tag-8", name: "Image Recognition" },
+      { id: "tag-9", name: "Neural Networks" },
+    ],
     sources: {
       papers: 120,
       repos: 195,
       articles: 280,
       discussions: 255,
     },
-    relatedTopics: ["Object Detection", "Image Recognition", "Neural Networks"],
-    description:
-      "Systems that can process, analyze, and understand visual information from the world.",
-    trendData: generateTrendData("week"),
-  },
-  {
-    id: "topic-4",
-    name: "AI Ethics",
-    score: 68,
-    change: 8,
-    count: 720,
-    timeframe: "week",
-    sources: {
-      papers: 85,
-      repos: 120,
-      articles: 290,
-      discussions: 225,
+    relatedContent: {
+      papers: 120,
+      repositories: 195,
+      articles: 280,
+      discussions: 255,
     },
-    relatedTopics: ["Bias", "Fairness", "Transparency", "Responsible AI"],
-    description:
-      "Ethical considerations and guidelines for AI development and deployment.",
     trendData: generateTrendData("week"),
-  },
-  {
-    id: "topic-5",
-    name: "Quantum ML",
-    score: 65,
-    change: 15,
-    count: 580,
-    timeframe: "week",
-    sources: {
-      papers: 75,
-      repos: 95,
-      articles: 180,
-      discussions: 230,
+    topicMetrics: {
+      totalMentions: 850,
+      paperCitations: 5600,
+      repoStars: 9800,
+      discussionEngagement: 2900,
     },
-    relatedTopics: [
-      "Quantum Computing",
-      "Quantum Algorithms",
-      "Hybrid Systems",
-    ],
-    description:
-      "Integration of quantum computing principles with machine learning algorithms.",
-    trendData: generateTrendData("week"),
+    trendMetrics: {
+      score: 72,
+      change: -5,
+      timeframe: "week",
+      count: 850,
+    },
   },
 ];
