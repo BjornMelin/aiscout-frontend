@@ -1,33 +1,30 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDebounce } from "use-debounce";
 import { Search } from "lucide-react";
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import type { SearchSuggestion } from "@/lib/types/search";
 
 interface SearchBarProps {
+  /** Placeholder text for the search input */
   placeholder?: string;
-  showAutocomplete?: boolean;
+  /** Whether to show search suggestions */
+  showSuggestions?: boolean;
+  /** Variant of the search bar */
   variant?: "header" | "page";
+  /** Additional CSS classes */
   className?: string;
+  /** Callback when search is performed */
   onSearch?: (query: string) => void;
 }
 
 export function SearchBar({
   placeholder = "Search AI/ML content...",
-  showAutocomplete = true,
+  showSuggestions = true,
   variant = "page",
   className,
   onSearch,
@@ -39,8 +36,24 @@ export function SearchBar({
   const [isOpen, setIsOpen] = React.useState(false);
   const [suggestions, setSuggestions] = React.useState<SearchSuggestion[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target as Node) &&
+        !inputRef.current?.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
     if (debouncedValue.length < 2) {
       setSuggestions([]);
       return;
@@ -104,38 +117,35 @@ export function SearchBar({
         </Button>
       </form>
 
-      {showAutocomplete && (
-        <CommandDialog open={isOpen} onOpenChange={setIsOpen}>
-          <CommandInput
-            value={value}
-            onValueChange={setValue}
-            placeholder={placeholder}
-          />
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            {suggestions.length > 0 && (
-              <CommandGroup heading="Suggestions">
-                {suggestions.map((suggestion) => (
-                  <CommandItem
-                    key={suggestion.id}
-                    onSelect={() => {
-                      setValue(suggestion.text);
-                      handleSearch(suggestion.text);
-                    }}
-                  >
-                    <span className="mr-2">
-                      {suggestion.type === "term" && "🔍"}
-                      {suggestion.type === "paper" && "📄"}
-                      {suggestion.type === "author" && "👤"}
-                      {suggestion.type === "repository" && "📦"}
-                    </span>
-                    {suggestion.text}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            )}
-          </CommandList>
-        </CommandDialog>
+      {showSuggestions && isOpen && suggestions.length > 0 && (
+        <div
+          ref={suggestionsRef}
+          className="absolute top-full left-0 w-full mt-1 bg-popover border rounded-md shadow-md z-50"
+        >
+          <div className="p-2">
+            <div className="text-xs font-medium text-muted-foreground px-2 py-1.5">
+              Suggestions
+            </div>
+            {suggestions.map((suggestion) => (
+              <button
+                key={suggestion.id}
+                onClick={() => {
+                  setValue(suggestion.text);
+                  handleSearch(suggestion.text);
+                }}
+                className="w-full text-left px-2 py-1.5 text-sm hover:bg-accent rounded-sm flex items-center gap-2"
+              >
+                <span>
+                  {suggestion.type === "term" && "🔍"}
+                  {suggestion.type === "paper" && "📄"}
+                  {suggestion.type === "author" && "👤"}
+                  {suggestion.type === "repository" && "📦"}
+                </span>
+                {suggestion.text}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );
